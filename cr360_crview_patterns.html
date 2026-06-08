@@ -462,6 +462,106 @@
     color: hsl(var(--foreground));
   }
 
+  /* AI-generated verdict summary */
+  .verdict-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-left: 3px solid hsl(var(--brand));
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 24px;
+  }
+  .verdict-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .verdict-head .verdict-meta {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
+  }
+  .verdict-head .verdict-meta svg {
+    color: hsl(var(--brand));
+    opacity: 0.9;
+  }
+  .verdict-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: hsl(var(--foreground));
+  }
+  .verdict-text strong {
+    font-weight: 600;
+  }
+
+  /* Schedule timeline */
+  .timeline-block { padding: 32px 28px 24px; }
+  .timeline-track {
+    position: relative;
+    height: 3px;
+    background: hsl(var(--border));
+    border-radius: 2px;
+    margin: 16px 6% 36px;
+  }
+  .timeline-fill {
+    position: absolute; top: 0; left: 0;
+    height: 100%;
+    background: hsl(var(--brand));
+    border-radius: 2px;
+  }
+  .timeline-markers {
+    position: absolute;
+    top: -7px; left: 0; right: 0;
+    display: flex; justify-content: space-between;
+  }
+  .timeline-marker {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: hsl(var(--background));
+    border: 2px solid hsl(var(--border));
+  }
+  .timeline-marker.done {
+    background: hsl(var(--success));
+    border-color: hsl(var(--success));
+  }
+  .timeline-marker.current {
+    background: hsl(var(--warning));
+    border-color: hsl(var(--warning));
+    box-shadow: 0 0 0 4px hsl(var(--warning) / 0.18);
+  }
+  .timeline-labels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0 6%;
+    gap: 8px;
+  }
+  .timeline-label { text-align: center; }
+  .timeline-label .stage {
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .timeline-label .planned {
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 2px;
+  }
+  .timeline-label .actual {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .timeline-label .actual.ok { color: hsl(var(--success)); }
+  .timeline-label .actual.slip { color: hsl(var(--warning)); }
+  .timeline-label .actual.future { color: hsl(var(--muted-foreground)); }
+
   /* End visual data components */
 
   table.data th {
@@ -676,6 +776,18 @@
       </div>
     </div>
 
+    <!-- AI verdict summary -->
+    <div class="verdict-card">
+      <div class="verdict-head">
+        <span class="pill warning"><span class="dot"></span>At risk</span>
+        <span class="verdict-meta">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+          AI summary · refreshed 10:42 AM
+        </span>
+      </div>
+      <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open and are blocking 3 test cases. At current velocity (~8 tests/day), the team needs approximately <strong>6 more days</strong> to clear the backlog. Recommend extending SIT by one week or descoping P1-blocked test cases for post-deployment.</p>
+    </div>
+
     <!-- CR Details -->
     <div class="section">
       <div class="section-head">
@@ -692,22 +804,43 @@
           <div class="kv"><div class="k">Cut Effort</div><div class="v">29.2 PD</div></div>
           <div class="kv"><div class="k">Testing Effort</div><div class="v">14.6 PD</div></div>
         </div>
-        <div class="date-grid">
-          <div class="col head"></div>
-          <div class="col head">Planned</div>
-          <div class="col head">Actual</div>
-          <div class="col row-label">Dev End</div>
-          <div class="col mono">2025-08-12</div>
-          <div class="col mono">2025-08-15</div>
-          <div class="col row-label">SIT Start</div>
-          <div class="col mono">2025-08-16</div>
-          <div class="col mono">2025-08-18</div>
-          <div class="col row-label">SIT End</div>
-          <div class="col mono">2025-08-30</div>
-          <div class="col mono slip">2025-09-04</div>
-          <div class="col row-label">Deployment</div>
-          <div class="col mono">2025-09-15</div>
-          <div class="col mono">—</div>
+      </div>
+    </div>
+
+    <!-- Schedule timeline -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">Schedule</div></div>
+      <div class="card-block timeline-block">
+        <div class="timeline-track">
+          <div class="timeline-fill" style="width: 67%;"></div>
+          <div class="timeline-markers">
+            <div class="timeline-marker done"></div>
+            <div class="timeline-marker done"></div>
+            <div class="timeline-marker current"></div>
+            <div class="timeline-marker future"></div>
+          </div>
+        </div>
+        <div class="timeline-labels">
+          <div class="timeline-label">
+            <div class="stage">Dev end</div>
+            <div class="planned">planned Aug 12</div>
+            <div class="actual ok">actual Aug 15</div>
+          </div>
+          <div class="timeline-label">
+            <div class="stage">SIT start</div>
+            <div class="planned">planned Aug 16</div>
+            <div class="actual ok">actual Aug 18</div>
+          </div>
+          <div class="timeline-label">
+            <div class="stage">SIT end</div>
+            <div class="planned">planned Aug 30</div>
+            <div class="actual slip">at risk · +5d</div>
+          </div>
+          <div class="timeline-label">
+            <div class="stage">Deploy</div>
+            <div class="planned">planned Sep 15</div>
+            <div class="actual future">future</div>
+          </div>
         </div>
       </div>
     </div>
@@ -906,6 +1039,18 @@
       </div>
     </div>
 
+    <!-- AI verdict summary -->
+    <div class="verdict-card">
+      <div class="verdict-head">
+        <span class="pill warning"><span class="dot"></span>At risk</span>
+        <span class="verdict-meta">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+          AI summary · refreshed 10:42 AM
+        </span>
+      </div>
+      <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open and are blocking 3 test cases. At current velocity (~8 tests/day), the team needs approximately <strong>6 more days</strong> to clear the backlog. Recommend extending SIT by one week or descoping P1-blocked test cases for post-deployment.</p>
+    </div>
+
     <!-- Tab strip -->
     <div class="tabs-strip">
       <button class="tab-btn active" data-tab="overview">Overview</button>
@@ -928,22 +1073,42 @@
             <div class="kv"><div class="k">Cut Effort</div><div class="v">29.2 PD</div></div>
             <div class="kv"><div class="k">Testing Effort</div><div class="v">14.6 PD</div></div>
           </div>
-          <div class="date-grid">
-            <div class="col head"></div>
-            <div class="col head">Planned</div>
-            <div class="col head">Actual</div>
-            <div class="col row-label">Dev End</div>
-            <div class="col mono">2025-08-12</div>
-            <div class="col mono">2025-08-15</div>
-            <div class="col row-label">SIT Start</div>
-            <div class="col mono">2025-08-16</div>
-            <div class="col mono">2025-08-18</div>
-            <div class="col row-label">SIT End</div>
-            <div class="col mono">2025-08-30</div>
-            <div class="col mono slip">2025-09-04</div>
-            <div class="col row-label">Deployment</div>
-            <div class="col mono">2025-09-15</div>
-            <div class="col mono">—</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="section-title">Schedule</div></div>
+        <div class="card-block timeline-block">
+          <div class="timeline-track">
+            <div class="timeline-fill" style="width: 67%;"></div>
+            <div class="timeline-markers">
+              <div class="timeline-marker done"></div>
+              <div class="timeline-marker done"></div>
+              <div class="timeline-marker current"></div>
+              <div class="timeline-marker future"></div>
+            </div>
+          </div>
+          <div class="timeline-labels">
+            <div class="timeline-label">
+              <div class="stage">Dev end</div>
+              <div class="planned">planned Aug 12</div>
+              <div class="actual ok">actual Aug 15</div>
+            </div>
+            <div class="timeline-label">
+              <div class="stage">SIT start</div>
+              <div class="planned">planned Aug 16</div>
+              <div class="actual ok">actual Aug 18</div>
+            </div>
+            <div class="timeline-label">
+              <div class="stage">SIT end</div>
+              <div class="planned">planned Aug 30</div>
+              <div class="actual slip">at risk · +5d</div>
+            </div>
+            <div class="timeline-label">
+              <div class="stage">Deploy</div>
+              <div class="planned">planned Sep 15</div>
+              <div class="actual future">future</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1156,6 +1321,54 @@
       </aside>
 
       <div class="content">
+
+        <div class="verdict-card">
+          <div class="verdict-head">
+            <span class="pill warning"><span class="dot"></span>At risk</span>
+            <span class="verdict-meta">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+              AI summary · 10:42 AM
+            </span>
+          </div>
+          <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open, blocking 3 test cases. At current velocity (~8 tests/day), the team needs <strong>6 more days</strong> to clear the backlog. Recommend extending SIT or descoping blocked tests.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Schedule</div></div>
+          <div class="card-block timeline-block">
+            <div class="timeline-track">
+              <div class="timeline-fill" style="width: 67%;"></div>
+              <div class="timeline-markers">
+                <div class="timeline-marker done"></div>
+                <div class="timeline-marker done"></div>
+                <div class="timeline-marker current"></div>
+                <div class="timeline-marker future"></div>
+              </div>
+            </div>
+            <div class="timeline-labels">
+              <div class="timeline-label">
+                <div class="stage">Dev end</div>
+                <div class="planned">Aug 12</div>
+                <div class="actual ok">Aug 15</div>
+              </div>
+              <div class="timeline-label">
+                <div class="stage">SIT start</div>
+                <div class="planned">Aug 16</div>
+                <div class="actual ok">Aug 18</div>
+              </div>
+              <div class="timeline-label">
+                <div class="stage">SIT end</div>
+                <div class="planned">Aug 30</div>
+                <div class="actual slip">+5d</div>
+              </div>
+              <div class="timeline-label">
+                <div class="stage">Deploy</div>
+                <div class="planned">Sep 15</div>
+                <div class="actual future">future</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="section">
           <div class="section-head"><div class="section-title">Test Design</div></div>
