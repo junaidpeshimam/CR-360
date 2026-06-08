@@ -333,6 +333,137 @@
     border-collapse: collapse;
     font-size: 13px;
   }
+
+  /* ---------- Visual data components (stacked bar, heatmap, aging) ---------- */
+
+  /* Stacked horizontal bar for test execution */
+  .exec-group {
+    padding: 18px 20px;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .exec-group:last-child { border-bottom: none; }
+  .exec-group .exec-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .exec-group .exec-label .name {
+    font-size: 13px; font-weight: 500;
+  }
+  .exec-group .exec-label .total {
+    font-size: 12px; color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
+  }
+  .stacked-bar {
+    height: 10px;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    background: hsl(var(--muted));
+    margin-bottom: 12px;
+  }
+  .stacked-bar .seg { height: 100%; }
+  .stacked-bar .seg.pass { background: hsl(var(--success)); }
+  .stacked-bar .seg.fail { background: hsl(var(--danger)); }
+  .stacked-bar .seg.block { background: hsl(var(--warning)); }
+  .stacked-bar .seg.prog { background: hsl(var(--brand)); }
+  .stacked-bar .seg.idle { background: hsl(var(--muted-foreground) / 0.45); }
+  .stacked-bar .seg.descoped { background: hsl(var(--muted-foreground) / 0.22); }
+
+  .bar-legend {
+    display: flex; flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+  }
+  .bar-legend .item { display: flex; align-items: center; gap: 6px; }
+  .bar-legend .item .dot {
+    width: 9px; height: 9px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .bar-legend .item .val {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar-legend .item .pct {
+    color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
+    margin-left: 2px;
+  }
+
+  /* Heatmap cells for defect threshold */
+  table.heatmap td {
+    text-align: right;
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  table.heatmap td.row-label {
+    text-align: left;
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    background: hsl(var(--muted) / 0.4);
+  }
+  table.heatmap td.heat[data-level="0"] {
+    color: hsl(var(--muted-foreground));
+    opacity: 0.45;
+  }
+  table.heatmap td.heat[data-level="1"] { background: hsl(var(--brand) / 0.07); }
+  table.heatmap td.heat[data-level="2"] { background: hsl(var(--brand) / 0.15); }
+  table.heatmap td.heat[data-level="3"] { background: hsl(var(--brand) / 0.28); }
+  table.heatmap td.heat[data-level="4"] {
+    background: hsl(var(--brand) / 0.45);
+    color: hsl(var(--brand-foreground));
+    font-weight: 600;
+  }
+  /* Open column uses warning/danger scale */
+  table.heatmap td.heat-open[data-level="0"] { color: hsl(var(--muted-foreground)); opacity: 0.45; }
+  table.heatmap td.heat-open[data-level="1"] { background: hsl(var(--warning) / 0.1); }
+  table.heatmap td.heat-open[data-level="2"] { background: hsl(var(--warning) / 0.22); color: hsl(var(--warning)); font-weight: 500; }
+  table.heatmap td.heat-open[data-level="3"] { background: hsl(var(--warning) / 0.38); color: hsl(var(--warning)); font-weight: 600; }
+  table.heatmap td.heat-open[data-level="4"] {
+    background: hsl(var(--danger) / 0.45);
+    color: hsl(var(--brand-foreground));
+    font-weight: 700;
+  }
+  /* Total row emphasis */
+  table.heatmap tr.total-row td.row-label,
+  table.heatmap tr.total-row td.heat {
+    border-top: 1px solid hsl(var(--border));
+    font-weight: 600;
+  }
+
+  /* Aging bar in open defects */
+  .aging-cell {
+    display: flex; align-items: center;
+    gap: 8px;
+    min-width: 100px;
+  }
+  .aging-bar {
+    flex: 1;
+    height: 4px;
+    background: hsl(var(--muted));
+    border-radius: 2px;
+    overflow: hidden;
+    min-width: 50px;
+  }
+  .aging-bar .fill {
+    height: 100%;
+    border-radius: 2px;
+    background: hsl(var(--success));
+  }
+  .aging-bar .fill.amber { background: hsl(var(--warning)); }
+  .aging-bar .fill.red { background: hsl(var(--danger)); }
+  .aging-days {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    min-width: 28px;
+    text-align: right;
+    color: hsl(var(--foreground));
+  }
+
+  /* End visual data components */
+
   table.data th {
     text-align: left;
     padding: 10px 14px;
@@ -597,38 +728,109 @@
     <!-- Test Execution -->
     <div class="section">
       <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
-      <div class="card-block exec-grid">
-        <table class="data">
-          <thead>
-            <tr>
-              <th></th><th class="num">Total</th><th class="num">Pass</th><th class="num">Failed</th><th class="num">Blocked</th><th class="num">In progress</th><th class="num">Not started</th><th class="num">Descoped</th><th class="num">Moved to preprod</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Progression count</td><td class="num">142</td><td class="num">98</td><td class="num">12</td><td class="num">5</td><td class="num">18</td><td class="num">7</td><td class="num">2</td><td class="num">0</td></tr>
-            <tr><td>Progression %</td><td class="num">100%</td><td class="num">69%</td><td class="num">8%</td><td class="num">4%</td><td class="num">13%</td><td class="num">5%</td><td class="num">1%</td><td class="num">0%</td></tr>
-            <tr><td>Dynamic count</td><td class="num">38</td><td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">0</td></tr>
-            <tr><td>Dynamic %</td><td class="num">100%</td><td class="num">58%</td><td class="num">11%</td><td class="num">5%</td><td class="num">21%</td><td class="num">5%</td><td class="num">0%</td><td class="num">0%</td></tr>
-          </tbody>
-        </table>
+      <div class="card-block">
+        <div class="exec-group">
+          <div class="exec-label">
+            <span class="name">Progression</span>
+            <span class="total">142 tests · 69% pass rate</span>
+          </div>
+          <div class="stacked-bar">
+            <div class="seg pass" style="width: 69.0%;" title="Pass: 98"></div>
+            <div class="seg fail" style="width: 8.5%;" title="Failed: 12"></div>
+            <div class="seg block" style="width: 3.5%;" title="Blocked: 5"></div>
+            <div class="seg prog" style="width: 12.7%;" title="In progress: 18"></div>
+            <div class="seg idle" style="width: 4.9%;" title="Not started: 7"></div>
+            <div class="seg descoped" style="width: 1.4%;" title="Descoped: 2"></div>
+          </div>
+          <div class="bar-legend">
+            <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">98</span><span class="pct">69%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">12</span><span class="pct">8%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">5</span><span class="pct">4%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">18</span><span class="pct">13%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">7</span><span class="pct">5%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.22);"></div>Descoped <span class="val">2</span><span class="pct">1%</span></div>
+          </div>
+        </div>
+        <div class="exec-group">
+          <div class="exec-label">
+            <span class="name">Dynamic</span>
+            <span class="total">38 tests · 58% pass rate</span>
+          </div>
+          <div class="stacked-bar">
+            <div class="seg pass" style="width: 57.9%;" title="Pass: 22"></div>
+            <div class="seg fail" style="width: 10.5%;" title="Failed: 4"></div>
+            <div class="seg block" style="width: 5.3%;" title="Blocked: 2"></div>
+            <div class="seg prog" style="width: 21.0%;" title="In progress: 8"></div>
+            <div class="seg idle" style="width: 5.3%;" title="Not started: 2"></div>
+          </div>
+          <div class="bar-legend">
+            <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">22</span><span class="pct">58%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">4</span><span class="pct">11%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">2</span><span class="pct">5%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">8</span><span class="pct">21%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">2</span><span class="pct">5%</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Defect threshold -->
     <div class="section">
-      <div class="section-head"><div class="section-title">Defects — Breached threshold</div></div>
-      <div class="card-block defect-matrix">
-        <table class="data">
+      <div class="section-head"><div class="section-title">Defects — Breached threshold</div><div class="section-action">Darker = more defects</div></div>
+      <div class="card-block">
+        <table class="data heatmap">
           <thead>
-            <tr>
-              <th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing issue</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th>
-            </tr>
+            <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th></tr>
           </thead>
           <tbody>
-            <tr><td>P1</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
-            <tr><td>P2</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td class="num">0</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr>
-            <tr><td>P3 + P4</td><td class="num">7</td><td class="num">4</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
-            <tr><td>Total</td><td class="num">17</td><td class="num">9</td><td class="num">8</td><td class="num">2</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">1</td><td class="num">0</td></tr>
+            <tr>
+              <td class="row-label">P1</td>
+              <td class="heat" data-level="2">4</td>
+              <td class="heat heat-open" data-level="2">2</td>
+              <td class="heat" data-level="2">2</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="0">0</td>
+            </tr>
+            <tr>
+              <td class="row-label">P2</td>
+              <td class="heat" data-level="3">6</td>
+              <td class="heat heat-open" data-level="3">3</td>
+              <td class="heat" data-level="2">3</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+            </tr>
+            <tr>
+              <td class="row-label">P3 + P4</td>
+              <td class="heat" data-level="3">7</td>
+              <td class="heat heat-open" data-level="3">4</td>
+              <td class="heat" data-level="2">3</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="1">2</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="0">0</td>
+            </tr>
+            <tr class="total-row">
+              <td class="row-label">Total</td>
+              <td class="heat" data-level="4">17</td>
+              <td class="heat heat-open" data-level="4">9</td>
+              <td class="heat" data-level="3">8</td>
+              <td class="heat" data-level="1">2</td>
+              <td class="heat" data-level="2">3</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="1">2</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -636,18 +838,48 @@
 
     <!-- Open defects -->
     <div class="section">
-      <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open</div></div>
+      <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
       <div class="card-block">
         <table class="data">
           <thead>
-            <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th class="num">Aging</th></tr>
+            <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th>Aging</th></tr>
           </thead>
           <tbody>
-            <tr><td><span class="id-link">PDI-1118</span></td><td>Notification engine</td><td><span class="pill danger">P1</span></td><td>Open</td><td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">TC-042, TC-051</td><td class="num">14</td></tr>
-            <tr><td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td><td><span class="pill danger">P1</span></td><td>In review</td><td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td><td class="mono">TC-067</td><td class="num">11</td></tr>
-            <tr><td><span class="id-link">PDI-1117</span></td><td>Statement export</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td><td class="mono">—</td><td class="num">10</td></tr>
-            <tr><td><span class="id-link">PDI-1119</span></td><td>Audit log</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td><td class="mono">TC-089</td><td class="num">8</td></tr>
-            <tr><td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">—</td><td class="num">5</td></tr>
+            <tr>
+              <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
+              <td><span class="pill danger">P1</span></td><td>Open</td>
+              <td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td>
+              <td class="mono">TC-042, TC-051</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
+              <td><span class="pill danger">P1</span></td><td>In review</td>
+              <td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td>
+              <td class="mono">TC-067</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
+              <td><span class="pill warning">P2</span></td><td>Open</td>
+              <td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td>
+              <td class="mono">—</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
+              <td><span class="pill warning">P2</span></td><td>Open</td>
+              <td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td>
+              <td class="mono">TC-089</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
+              <td><span class="pill warning">P2</span></td><td>Open</td>
+              <td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td>
+              <td class="mono">—</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -733,33 +965,108 @@
     <div class="tab-content" id="tab-execution">
       <div class="section">
         <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
-        <div class="card-block exec-grid">
-          <table class="data">
-            <thead>
-              <tr><th></th><th class="num">Total</th><th class="num">Pass</th><th class="num">Failed</th><th class="num">Blocked</th><th class="num">In progress</th><th class="num">Not started</th><th class="num">Descoped</th><th class="num">Moved to preprod</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Progression count</td><td class="num">142</td><td class="num">98</td><td class="num">12</td><td class="num">5</td><td class="num">18</td><td class="num">7</td><td class="num">2</td><td class="num">0</td></tr>
-              <tr><td>Progression %</td><td class="num">100%</td><td class="num">69%</td><td class="num">8%</td><td class="num">4%</td><td class="num">13%</td><td class="num">5%</td><td class="num">1%</td><td class="num">0%</td></tr>
-              <tr><td>Dynamic count</td><td class="num">38</td><td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">0</td></tr>
-              <tr><td>Dynamic %</td><td class="num">100%</td><td class="num">58%</td><td class="num">11%</td><td class="num">5%</td><td class="num">21%</td><td class="num">5%</td><td class="num">0%</td><td class="num">0%</td></tr>
-            </tbody>
-          </table>
+        <div class="card-block">
+          <div class="exec-group">
+            <div class="exec-label">
+              <span class="name">Progression</span>
+              <span class="total">142 tests · 69% pass rate</span>
+            </div>
+            <div class="stacked-bar">
+              <div class="seg pass" style="width: 69.0%;"></div>
+              <div class="seg fail" style="width: 8.5%;"></div>
+              <div class="seg block" style="width: 3.5%;"></div>
+              <div class="seg prog" style="width: 12.7%;"></div>
+              <div class="seg idle" style="width: 4.9%;"></div>
+              <div class="seg descoped" style="width: 1.4%;"></div>
+            </div>
+            <div class="bar-legend">
+              <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">98</span><span class="pct">69%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">12</span><span class="pct">8%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">5</span><span class="pct">4%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">18</span><span class="pct">13%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">7</span><span class="pct">5%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.22);"></div>Descoped <span class="val">2</span><span class="pct">1%</span></div>
+            </div>
+          </div>
+          <div class="exec-group">
+            <div class="exec-label">
+              <span class="name">Dynamic</span>
+              <span class="total">38 tests · 58% pass rate</span>
+            </div>
+            <div class="stacked-bar">
+              <div class="seg pass" style="width: 57.9%;"></div>
+              <div class="seg fail" style="width: 10.5%;"></div>
+              <div class="seg block" style="width: 5.3%;"></div>
+              <div class="seg prog" style="width: 21.0%;"></div>
+              <div class="seg idle" style="width: 5.3%;"></div>
+            </div>
+            <div class="bar-legend">
+              <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">22</span><span class="pct">58%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">4</span><span class="pct">11%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">2</span><span class="pct">5%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">8</span><span class="pct">21%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">2</span><span class="pct">5%</span></div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="section">
-        <div class="section-head"><div class="section-title">Defects — Breached threshold</div></div>
-        <div class="card-block defect-matrix">
-          <table class="data">
+        <div class="section-head"><div class="section-title">Defects — Breached threshold</div><div class="section-action">Darker = more defects</div></div>
+        <div class="card-block">
+          <table class="data heatmap">
             <thead>
-              <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing issue</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th></tr>
+              <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th></tr>
             </thead>
             <tbody>
-              <tr><td>P1</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
-              <tr><td>P2</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td class="num">0</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr>
-              <tr><td>P3 + P4</td><td class="num">7</td><td class="num">4</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
-              <tr><td>Total</td><td class="num">17</td><td class="num">9</td><td class="num">8</td><td class="num">2</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">1</td><td class="num">0</td></tr>
+              <tr>
+                <td class="row-label">P1</td>
+                <td class="heat" data-level="2">4</td>
+                <td class="heat heat-open" data-level="2">2</td>
+                <td class="heat" data-level="2">2</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
+              <tr>
+                <td class="row-label">P2</td>
+                <td class="heat" data-level="3">6</td>
+                <td class="heat heat-open" data-level="3">3</td>
+                <td class="heat" data-level="2">3</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
+              <tr>
+                <td class="row-label">P3 + P4</td>
+                <td class="heat" data-level="3">7</td>
+                <td class="heat heat-open" data-level="3">4</td>
+                <td class="heat" data-level="2">3</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="1">2</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
+              <tr class="total-row">
+                <td class="row-label">Total</td>
+                <td class="heat" data-level="4">17</td>
+                <td class="heat heat-open" data-level="4">9</td>
+                <td class="heat" data-level="3">8</td>
+                <td class="heat" data-level="1">2</td>
+                <td class="heat" data-level="2">3</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="1">2</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -769,18 +1076,48 @@
     <!-- Defects tab -->
     <div class="tab-content" id="tab-defects">
       <div class="section">
-        <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open</div></div>
+        <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
         <div class="card-block">
           <table class="data">
             <thead>
-              <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th class="num">Aging</th></tr>
+              <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th>Aging</th></tr>
             </thead>
             <tbody>
-              <tr><td><span class="id-link">PDI-1118</span></td><td>Notification engine</td><td><span class="pill danger">P1</span></td><td>Open</td><td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">TC-042, TC-051</td><td class="num">14</td></tr>
-              <tr><td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td><td><span class="pill danger">P1</span></td><td>In review</td><td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td><td class="mono">TC-067</td><td class="num">11</td></tr>
-              <tr><td><span class="id-link">PDI-1117</span></td><td>Statement export</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td><td class="mono">—</td><td class="num">10</td></tr>
-              <tr><td><span class="id-link">PDI-1119</span></td><td>Audit log</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td><td class="mono">TC-089</td><td class="num">8</td></tr>
-              <tr><td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">—</td><td class="num">5</td></tr>
+              <tr>
+                <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
+                <td><span class="pill danger">P1</span></td><td>Open</td>
+                <td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td>
+                <td class="mono">TC-042, TC-051</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
+                <td><span class="pill danger">P1</span></td><td>In review</td>
+                <td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td>
+                <td class="mono">TC-067</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
+                <td><span class="pill warning">P2</span></td><td>Open</td>
+                <td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td>
+                <td class="mono">—</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
+                <td><span class="pill warning">P2</span></td><td>Open</td>
+                <td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td>
+                <td class="mono">TC-089</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
+                <td><span class="pill warning">P2</span></td><td>Open</td>
+                <td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td>
+                <td class="mono">—</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -834,51 +1171,133 @@
 
         <div class="section">
           <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
-          <div class="card-block exec-grid" style="overflow-x: auto;">
-            <table class="data">
-              <thead>
-                <tr><th></th><th class="num">Total</th><th class="num">Pass</th><th class="num">Failed</th><th class="num">Blocked</th><th class="num">In prog</th><th class="num">Not started</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>Progression</td><td class="num">142</td><td class="num">98</td><td class="num">12</td><td class="num">5</td><td class="num">18</td><td class="num">7</td></tr>
-                <tr><td>Progression %</td><td class="num">100%</td><td class="num">69%</td><td class="num">8%</td><td class="num">4%</td><td class="num">13%</td><td class="num">5%</td></tr>
-                <tr><td>Dynamic</td><td class="num">38</td><td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">8</td><td class="num">2</td></tr>
-                <tr><td>Dynamic %</td><td class="num">100%</td><td class="num">58%</td><td class="num">11%</td><td class="num">5%</td><td class="num">21%</td><td class="num">5%</td></tr>
-              </tbody>
-            </table>
+          <div class="card-block">
+            <div class="exec-group">
+              <div class="exec-label">
+                <span class="name">Progression</span>
+                <span class="total">142 · 69% pass</span>
+              </div>
+              <div class="stacked-bar">
+                <div class="seg pass" style="width: 69.0%;"></div>
+                <div class="seg fail" style="width: 8.5%;"></div>
+                <div class="seg block" style="width: 3.5%;"></div>
+                <div class="seg prog" style="width: 12.7%;"></div>
+                <div class="seg idle" style="width: 4.9%;"></div>
+                <div class="seg descoped" style="width: 1.4%;"></div>
+              </div>
+              <div class="bar-legend">
+                <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">98</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Fail <span class="val">12</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Block <span class="val">5</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>Prog <span class="val">18</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Idle <span class="val">7</span></div>
+              </div>
+            </div>
+            <div class="exec-group">
+              <div class="exec-label">
+                <span class="name">Dynamic</span>
+                <span class="total">38 · 58% pass</span>
+              </div>
+              <div class="stacked-bar">
+                <div class="seg pass" style="width: 57.9%;"></div>
+                <div class="seg fail" style="width: 10.5%;"></div>
+                <div class="seg block" style="width: 5.3%;"></div>
+                <div class="seg prog" style="width: 21.0%;"></div>
+                <div class="seg idle" style="width: 5.3%;"></div>
+              </div>
+              <div class="bar-legend">
+                <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">22</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Fail <span class="val">4</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Block <span class="val">2</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>Prog <span class="val">8</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Idle <span class="val">2</span></div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="section">
           <div class="section-head"><div class="section-title">Defects — Breached threshold</div></div>
-          <div class="card-block defect-matrix" style="overflow-x: auto;">
-            <table class="data">
+          <div class="card-block" style="overflow-x: auto;">
+            <table class="data heatmap">
               <thead>
                 <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Func.</th><th class="num">Env.</th><th class="num">Design</th><th class="num">Existing</th></tr>
               </thead>
               <tbody>
-                <tr><td>P1</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
-                <tr><td>P2</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td class="num">0</td><td class="num">1</td><td class="num">1</td></tr>
-                <tr><td>P3 + P4</td><td class="num">7</td><td class="num">4</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">0</td></tr>
-                <tr><td>Total</td><td class="num">17</td><td class="num">9</td><td class="num">8</td><td class="num">2</td><td class="num">3</td><td class="num">1</td></tr>
+                <tr>
+                  <td class="row-label">P1</td>
+                  <td class="heat" data-level="2">4</td>
+                  <td class="heat heat-open" data-level="2">2</td>
+                  <td class="heat" data-level="2">2</td>
+                  <td class="heat" data-level="1">1</td>
+                  <td class="heat" data-level="0">0</td>
+                  <td class="heat" data-level="0">0</td>
+                </tr>
+                <tr>
+                  <td class="row-label">P2</td>
+                  <td class="heat" data-level="3">6</td>
+                  <td class="heat heat-open" data-level="3">3</td>
+                  <td class="heat" data-level="2">3</td>
+                  <td class="heat" data-level="0">0</td>
+                  <td class="heat" data-level="1">1</td>
+                  <td class="heat" data-level="1">1</td>
+                </tr>
+                <tr>
+                  <td class="row-label">P3 + P4</td>
+                  <td class="heat" data-level="3">7</td>
+                  <td class="heat heat-open" data-level="3">4</td>
+                  <td class="heat" data-level="2">3</td>
+                  <td class="heat" data-level="1">1</td>
+                  <td class="heat" data-level="1">2</td>
+                  <td class="heat" data-level="0">0</td>
+                </tr>
+                <tr class="total-row">
+                  <td class="row-label">Total</td>
+                  <td class="heat" data-level="4">17</td>
+                  <td class="heat heat-open" data-level="4">9</td>
+                  <td class="heat" data-level="3">8</td>
+                  <td class="heat" data-level="1">2</td>
+                  <td class="heat" data-level="2">3</td>
+                  <td class="heat" data-level="1">1</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
 
         <div class="section">
-          <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open</div></div>
+          <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
           <div class="card-block" style="overflow-x: auto;">
             <table class="data">
               <thead>
-                <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Assignee</th><th class="num">Aging</th></tr>
+                <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Assignee</th><th>Aging</th></tr>
               </thead>
               <tbody>
-                <tr><td><span class="id-link">PDI-1118</span></td><td>Notification engine</td><td><span class="pill danger">P1</span></td><td>Open</td><td>Hiroshi Park</td><td class="num">14</td></tr>
-                <tr><td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td><td><span class="pill danger">P1</span></td><td>In review</td><td>Daniel Das</td><td class="num">11</td></tr>
-                <tr><td><span class="id-link">PDI-1117</span></td><td>Statement export</td><td><span class="pill warning">P2</span></td><td>Open</td><td>Layla Iyer</td><td class="num">10</td></tr>
-                <tr><td><span class="id-link">PDI-1119</span></td><td>Audit log</td><td><span class="pill warning">P2</span></td><td>Open</td><td>Daniel Das</td><td class="num">8</td></tr>
-                <tr><td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td><td><span class="pill warning">P2</span></td><td>Open</td><td>Hiroshi Park</td><td class="num">5</td></tr>
+                <tr>
+                  <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
+                  <td><span class="pill danger">P1</span></td><td>Open</td><td>Hiroshi Park</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
+                  <td><span class="pill danger">P1</span></td><td>In review</td><td>Daniel Das</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
+                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Layla Iyer</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
+                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Daniel Das</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
+                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Hiroshi Park</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
+                </tr>
               </tbody>
             </table>
           </div>
