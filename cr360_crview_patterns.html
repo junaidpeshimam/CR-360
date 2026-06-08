@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CR 360 — CR View patterns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --border: 240 5.9% 90%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --brand: 243 75% 59%;
+    --brand-foreground: 0 0% 100%;
+    --success: 142 71% 45%;
+    --success-bg: 142 76% 96%;
+    --warning: 25 95% 53%;
+    --warning-bg: 33 100% 96%;
+    --danger: 0 84% 60%;
+    --danger-bg: 0 86% 97%;
+    --radius: 0.625rem;
+  }
+  html.dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 6% 6%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --border: 240 3.7% 15.9%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --brand: 239 84% 67%;
+    --success: 142 71% 50%;
+    --success-bg: 142 30% 12%;
+    --warning: 25 95% 60%;
+    --warning-bg: 25 30% 12%;
+    --danger: 0 72% 60%;
+    --danger-bg: 0 30% 12%;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: 'Geist', -apple-system, sans-serif;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  .icon { width: 16px; height: 16px; stroke-width: 2; flex-shrink: 0; }
+  .icon-sm { width: 14px; height: 14px; }
+
+  /* Top nav */
+  nav.topnav {
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    position: sticky; top: 0; z-index: 50;
+  }
+  nav.topnav .inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .brand .name {
+    font-size: 19px; font-weight: 600;
+    letter-spacing: -0.025em;
+    color: hsl(var(--brand));
+  }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 12px;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: transparent;
+    color: hsl(var(--foreground));
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer; line-height: 1;
+    transition: background 100ms;
+  }
+  .btn:hover { background: hsl(var(--muted)); }
+  .btn-primary {
+    background: hsl(var(--brand));
+    color: hsl(var(--brand-foreground));
+    border-color: hsl(var(--brand));
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-icon { width: 32px; padding: 0; justify-content: center; }
+  html.dark .icon-sun { display: none; }
+  html:not(.dark) .icon-moon { display: none; }
+
+  /* Selectors row */
+  .selectors {
+    padding: 24px 0;
+    display: flex; gap: 12px; align-items: end;
+    flex-wrap: wrap;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .select-group { display: flex; flex-direction: column; gap: 6px; }
+  .select-group label {
+    font-size: 12px; color: hsl(var(--muted-foreground));
+    font-weight: 500;
+  }
+  select.field {
+    appearance: none;
+    height: 36px; padding: 0 32px 0 12px;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background)) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center;
+    font-family: inherit; font-size: 13px;
+    color: hsl(var(--foreground));
+    min-width: 200px;
+    cursor: pointer;
+  }
+  .selectors-spacer { flex: 1; }
+
+  /* Pattern switcher */
+  .mode-switcher {
+    padding: 16px 0;
+    display: flex; gap: 6px; align-items: center;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .mode-switcher .label {
+    font-size: 12px; color: hsl(var(--muted-foreground)); margin-right: 8px;
+  }
+  .mode-btn {
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: transparent;
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    color: hsl(var(--muted-foreground));
+  }
+  .mode-btn:hover { background: hsl(var(--muted)); }
+  .mode-btn.active {
+    background: hsl(var(--brand));
+    color: hsl(var(--brand-foreground));
+    border-color: hsl(var(--brand));
+  }
+
+  /* Searchable combobox (CR ID) */
+  .combobox { position: relative; min-width: 320px; }
+  .combobox-trigger {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 36px; padding: 0 12px;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    font-family: inherit; font-size: 13px;
+    color: hsl(var(--foreground));
+    text-align: left;
+    cursor: pointer;
+    gap: 8px;
+  }
+  .combobox-trigger:hover { background: hsl(var(--muted) / 0.5); }
+  .combobox-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .combobox-chevron { flex-shrink: 0; width: 14px; height: 14px; opacity: 0.6; }
+  .combobox-popover {
+    position: absolute;
+    top: calc(100% + 4px); left: 0;
+    width: 100%;
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px -8px hsl(var(--foreground) / 0.15);
+    z-index: 100;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    max-height: 320px;
+  }
+  .combobox-popover[hidden] { display: none; }
+  .combobox-search {
+    width: 100%; height: 36px;
+    padding: 0 12px;
+    border: none;
+    border-bottom: 1px solid hsl(var(--border));
+    background: transparent;
+    color: hsl(var(--foreground));
+    font-family: inherit; font-size: 13px;
+    outline: none;
+  }
+  .combobox-search::placeholder { color: hsl(var(--muted-foreground)); }
+  .combobox-list {
+    flex: 1; overflow-y: auto;
+    padding: 4px;
+  }
+  .combobox-option {
+    width: 100%;
+    display: block;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit; font-size: 13px;
+    color: hsl(var(--foreground));
+    text-align: left;
+    cursor: pointer;
+  }
+  .combobox-option:hover { background: hsl(var(--muted)); }
+  .combobox-option[hidden] { display: none; }
+  .combobox-option.selected { background: hsl(var(--muted)); font-weight: 500; }
+  .combobox-empty {
+    padding: 16px;
+    font-size: 13px;
+    color: hsl(var(--muted-foreground));
+    text-align: center;
+  }
+  .combobox-empty[hidden] { display: none; }
+
+  /* Shared section styles */
+  .pattern-pane { padding: 24px 0 48px; }
+  .pattern-pane:not(.active) { display: none; }
+
+  .section { margin-bottom: 32px; }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 13px; font-weight: 600;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .section-action { font-size: 12px; color: hsl(var(--muted-foreground)); }
+
+  .card-block {
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--card));
+    overflow: hidden;
+  }
+
+  /* CR header banner */
+  .cr-banner {
+    padding: 20px 24px;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--card));
+    margin-bottom: 24px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 24px;
+  }
+  .cr-banner .left .id {
+    font-size: 24px; font-weight: 600;
+    letter-spacing: -0.02em;
+    color: hsl(var(--brand));
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .cr-banner .left .summary {
+    font-size: 16px; font-weight: 500;
+    margin-top: 4px;
+    color: hsl(var(--foreground));
+  }
+  .cr-banner .left .sub {
+    font-size: 12px; color: hsl(var(--muted-foreground));
+    margin-top: 8px;
+  }
+  .cr-banner .right { display: flex; gap: 6px; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px; font-weight: 500;
+    line-height: 1;
+  }
+  .pill.success { background: hsl(var(--success-bg)); color: hsl(var(--success)); }
+  .pill.warning { background: hsl(var(--warning-bg)); color: hsl(var(--warning)); }
+  .pill.danger { background: hsl(var(--danger-bg)); color: hsl(var(--danger)); }
+  .pill.muted { background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); }
+  .pill .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  /* Key-value grid */
+  .kv-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding: 4px 0;
+  }
+  .kv {
+    padding: 12px 16px;
+    border-right: 1px solid hsl(var(--border));
+  }
+  .kv:nth-child(4n) { border-right: none; }
+  .kv .k {
+    font-size: 11px; color: hsl(var(--muted-foreground));
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 4px; font-weight: 500;
+  }
+  .kv .v {
+    font-size: 14px; font-weight: 500; color: hsl(var(--foreground));
+  }
+
+  /* Date comparison rows */
+  .date-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .date-grid .col {
+    padding: 12px 16px;
+    border-right: 1px solid hsl(var(--border));
+    font-size: 13px;
+  }
+  .date-grid .col:last-child { border-right: none; }
+  .date-grid .head {
+    font-size: 11px; color: hsl(var(--muted-foreground));
+    text-transform: uppercase; letter-spacing: 0.05em;
+    background: hsl(var(--muted) / 0.4);
+    font-weight: 500;
+  }
+  .date-grid .row-label { color: hsl(var(--muted-foreground)); }
+  .date-grid .slip { color: hsl(var(--warning)); font-weight: 500; }
+
+  /* Tables */
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.data th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px; font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase; letter-spacing: 0.05em;
+    background: hsl(var(--muted) / 0.4);
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  table.data td {
+    padding: 10px 14px;
+    border-bottom: 1px solid hsl(var(--border));
+    font-variant-numeric: tabular-nums;
+  }
+  table.data tr:last-child td { border-bottom: none; }
+  table.data td.num { text-align: right; font-family: 'Geist Mono', monospace; }
+  table.data th.num { text-align: right; }
+  table.data td .id-link { color: hsl(var(--brand)); font-family: 'Geist Mono', monospace; }
+
+  /* Test execution mini grid */
+  .exec-grid table.data th:first-child,
+  .exec-grid table.data td:first-child {
+    font-weight: 500; color: hsl(var(--foreground));
+    background: hsl(var(--muted) / 0.4);
+  }
+
+  /* Defect threshold matrix */
+  .defect-matrix table.data td:first-child {
+    font-weight: 500; background: hsl(var(--muted) / 0.4);
+  }
+
+  /* Tabs (Pattern B) */
+  .tabs-strip {
+    display: flex; gap: 4px;
+    border-bottom: 1px solid hsl(var(--border));
+    margin-bottom: 24px;
+  }
+  .tab-btn {
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    margin-bottom: -1px;
+  }
+  .tab-btn:hover { color: hsl(var(--foreground)); }
+  .tab-btn.active {
+    color: hsl(var(--brand));
+    border-bottom-color: hsl(var(--brand));
+  }
+  .tab-content:not(.active) { display: none; }
+
+  /* Two pane (Pattern C) */
+  .two-pane {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .two-pane .sidebar {
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 20px;
+    background: hsl(var(--card));
+    position: sticky; top: 80px;
+  }
+  .two-pane .sidebar .id-large {
+    font-size: 22px; font-weight: 600;
+    color: hsl(var(--brand));
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .two-pane .sidebar .summary-line {
+    font-size: 14px; margin-bottom: 14px;
+  }
+  .two-pane .sidebar .sb-list {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .two-pane .sidebar .sb-list .row {
+    display: flex; justify-content: space-between; font-size: 12px;
+  }
+  .two-pane .sidebar .sb-list .row .k {
+    color: hsl(var(--muted-foreground));
+  }
+  .two-pane .sidebar .sb-list .row .v {
+    font-weight: 500;
+  }
+
+  /* Pattern label intro */
+  .pattern-note {
+    padding: 12px 16px;
+    background: hsl(var(--muted) / 0.4);
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 24px;
+  }
+  .pattern-note strong { color: hsl(var(--foreground)); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="container inner">
+    <a href="./cr360_home.html" class="brand" style="text-decoration: none;">
+      <div class="name">CR 360</div>
+    </a>
+    <div class="nav-actions">
+      <button class="btn btn-icon" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon icon-sm icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        <svg class="icon icon-sm icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="btn btn-primary">
+        <svg class="icon icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+        Refresh
+      </button>
+      <button class="btn">
+        <svg class="icon icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Export
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- Selectors -->
+  <div class="selectors">
+    <div class="select-group">
+      <label>Tower</label>
+      <select class="field">
+        <option>Automation</option>
+        <option>BAU-Channels</option>
+        <option>BAU-Channels Agile</option>
+        <option>BAU-Commercial</option>
+        <option>BAU-Commercial Agile</option>
+        <option>BAU-IT4IT&amp;Support</option>
+        <option>BIF-ADM</option>
+        <option>BIF-Config</option>
+        <option>BAU-Regression</option>
+        <option>BIF-Regression</option>
+        <option>Capex</option>
+        <option>L3-TT</option>
+        <option>NFT-Shared Services</option>
+        <option>Digital</option>
+      </select>
+    </div>
+    <div class="select-group">
+      <label>CR ID</label>
+      <div class="combobox" id="crCombobox">
+        <button type="button" class="combobox-trigger">
+          <span class="combobox-value">CR-686 — Audit log retention</span>
+          <svg class="combobox-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="combobox-popover" hidden>
+          <input type="text" class="combobox-search" placeholder="Search CRs..." autocomplete="off">
+          <div class="combobox-list">
+            <button type="button" class="combobox-option selected" data-value="CR-686 — Audit log retention">CR-686 — Audit log retention</button>
+            <button type="button" class="combobox-option" data-value="CR-600 — SSO integration">CR-600 — SSO integration</button>
+            <button type="button" class="combobox-option" data-value="CR-601 — Fraud rule update">CR-601 — Fraud rule update</button>
+            <button type="button" class="combobox-option" data-value="CR-602 — Card tokenization">CR-602 — Card tokenization</button>
+            <button type="button" class="combobox-option" data-value="CR-603 — Mobile dashboard">CR-603 — Mobile dashboard</button>
+            <button type="button" class="combobox-option" data-value="CR-617 — Limit recalculation">CR-617 — Limit recalculation</button>
+            <button type="button" class="combobox-option" data-value="CR-628 — API gateway upgrade">CR-628 — API gateway upgrade</button>
+            <button type="button" class="combobox-option" data-value="CR-633 — Audit log retention">CR-633 — Audit log retention</button>
+            <button type="button" class="combobox-option" data-value="CR-660 — SSO integration">CR-660 — SSO integration</button>
+            <button type="button" class="combobox-option" data-value="CR-696 — Mobile dashboard">CR-696 — Mobile dashboard</button>
+            <button type="button" class="combobox-option" data-value="CR-728 — Rate engine patch">CR-728 — Rate engine patch</button>
+            <button type="button" class="combobox-option" data-value="CR-733 — Audit log retention">CR-733 — Audit log retention</button>
+          </div>
+          <div class="combobox-empty" hidden>No CRs match.</div>
+        </div>
+      </div>
+    </div>
+    <div class="selectors-spacer"></div>
+    <div style="font-size: 12px; color: hsl(var(--muted-foreground)); padding-bottom: 8px;">
+      Last refreshed: <span class="mono">10:42 AM IST</span>
+    </div>
+  </div>
+
+  <!-- Mode switcher -->
+  <div class="mode-switcher">
+    <span class="label">Layout pattern:</span>
+    <button class="mode-btn active" data-pattern="a">A — Single scroll</button>
+    <button class="mode-btn" data-pattern="b">B — Three tabs</button>
+    <button class="mode-btn" data-pattern="c">C — Two-pane sticky</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PATTERN A: Single scrollable page -->
+  <!-- ============================================================ -->
+  <div class="pattern-pane active" id="pattern-a">
+
+    <div class="pattern-note"><strong>Pattern A:</strong> all 5 sections stacked top-to-bottom. Scroll to see everything. Zero clicks, but a long page.</div>
+
+    <!-- CR banner -->
+    <div class="cr-banner">
+      <div class="left">
+        <div class="id">CR-686</div>
+        <div class="summary">Audit log retention</div>
+        <div class="sub">Owned by Layla Iyer · 5 Jira issues attached · Towers: Cards, Wealth, Onboarding</div>
+      </div>
+      <div class="right">
+        <span class="pill warning"><span class="dot"></span>In progress</span>
+      </div>
+    </div>
+
+    <!-- CR Details -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">CR Details</div>
+      </div>
+      <div class="card-block">
+        <div class="kv-grid">
+          <div class="kv"><div class="k">ITPM</div><div class="v">Layla Iyer</div></div>
+          <div class="kv"><div class="k">SD Name</div><div class="v">Settlement Domain</div></div>
+          <div class="kv"><div class="k">Demand Manager</div><div class="v">Kavya Ali</div></div>
+          <div class="kv"><div class="k">Priority</div><div class="v">P1</div></div>
+          <div class="kv"><div class="k">Delivery Tower</div><div class="v">Cards (primary)</div></div>
+          <div class="kv"><div class="k">Complexity</div><div class="v">High</div></div>
+          <div class="kv"><div class="k">Cut Effort</div><div class="v">29.2 PD</div></div>
+          <div class="kv"><div class="k">Testing Effort</div><div class="v">14.6 PD</div></div>
+        </div>
+        <div class="date-grid">
+          <div class="col head"></div>
+          <div class="col head">Planned</div>
+          <div class="col head">Actual</div>
+          <div class="col row-label">Dev End</div>
+          <div class="col mono">2025-08-12</div>
+          <div class="col mono">2025-08-15</div>
+          <div class="col row-label">SIT Start</div>
+          <div class="col mono">2025-08-16</div>
+          <div class="col mono">2025-08-18</div>
+          <div class="col row-label">SIT End</div>
+          <div class="col mono">2025-08-30</div>
+          <div class="col mono slip">2025-09-04</div>
+          <div class="col row-label">Deployment</div>
+          <div class="col mono">2025-09-15</div>
+          <div class="col mono">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Design -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">Test Design</div></div>
+      <div class="card-block">
+        <div class="kv-grid">
+          <div class="kv"><div class="k">Designer</div><div class="v">Daniel Das</div></div>
+          <div class="kv"><div class="k">SIT Plan Key</div><div class="v mono">TP-3402</div></div>
+          <div class="kv"><div class="k">Dynamic Plan Key</div><div class="v mono">TP-3403</div></div>
+          <div class="kv"><div class="k">Approval Status</div><div class="v"><span class="pill success"><span class="dot"></span>Approved</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Execution -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
+      <div class="card-block exec-grid">
+        <table class="data">
+          <thead>
+            <tr>
+              <th></th><th class="num">Total</th><th class="num">Pass</th><th class="num">Failed</th><th class="num">Blocked</th><th class="num">In progress</th><th class="num">Not started</th><th class="num">Descoped</th><th class="num">Moved to preprod</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Progression count</td><td class="num">142</td><td class="num">98</td><td class="num">12</td><td class="num">5</td><td class="num">18</td><td class="num">7</td><td class="num">2</td><td class="num">0</td></tr>
+            <tr><td>Progression %</td><td class="num">100%</td><td class="num">69%</td><td class="num">8%</td><td class="num">4%</td><td class="num">13%</td><td class="num">5%</td><td class="num">1%</td><td class="num">0%</td></tr>
+            <tr><td>Dynamic count</td><td class="num">38</td><td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">0</td></tr>
+            <tr><td>Dynamic %</td><td class="num">100%</td><td class="num">58%</td><td class="num">11%</td><td class="num">5%</td><td class="num">21%</td><td class="num">5%</td><td class="num">0%</td><td class="num">0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Defect threshold -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">Defects — Breached threshold</div></div>
+      <div class="card-block defect-matrix">
+        <table class="data">
+          <thead>
+            <tr>
+              <th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing issue</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>P1</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+            <tr><td>P2</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td class="num">0</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr>
+            <tr><td>P3 + P4</td><td class="num">7</td><td class="num">4</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+            <tr><td>Total</td><td class="num">17</td><td class="num">9</td><td class="num">8</td><td class="num">2</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">1</td><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Open defects -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open</div></div>
+      <div class="card-block">
+        <table class="data">
+          <thead>
+            <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th class="num">Aging</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="id-link">PDI-1118</span></td><td>Notification engine</td><td><span class="pill danger">P1</span></td><td>Open</td><td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">TC-042, TC-051</td><td class="num">14</td></tr>
+            <tr><td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td><td><span class="pill danger">P1</span></td><td>In review</td><td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td><td class="mono">TC-067</td><td class="num">11</td></tr>
+            <tr><td><span class="id-link">PDI-1117</span></td><td>Statement export</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td><td class="mono">—</td><td class="num">10</td></tr>
+            <tr><td><span class="id-link">PDI-1119</span></td><td>Audit log</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td><td class="mono">TC-089</td><td class="num">8</td></tr>
+            <tr><td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">—</td><td class="num">5</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PATTERN B: Three tabs -->
+  <!-- ============================================================ -->
+  <div class="pattern-pane" id="pattern-b">
+
+    <div class="pattern-note"><strong>Pattern B:</strong> sections grouped into 3 tabs — Overview, Execution, Open Defects. Click a tab to focus.</div>
+
+    <!-- CR banner -->
+    <div class="cr-banner">
+      <div class="left">
+        <div class="id">CR-686</div>
+        <div class="summary">Audit log retention</div>
+        <div class="sub">Owned by Layla Iyer · 5 Jira issues attached · Towers: Cards, Wealth, Onboarding</div>
+      </div>
+      <div class="right">
+        <span class="pill warning"><span class="dot"></span>In progress</span>
+      </div>
+    </div>
+
+    <!-- Tab strip -->
+    <div class="tabs-strip">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="execution">Execution</button>
+      <button class="tab-btn" data-tab="defects">Open Defects</button>
+    </div>
+
+    <!-- Overview tab -->
+    <div class="tab-content active" id="tab-overview">
+      <div class="section">
+        <div class="section-head"><div class="section-title">CR Details</div></div>
+        <div class="card-block">
+          <div class="kv-grid">
+            <div class="kv"><div class="k">ITPM</div><div class="v">Layla Iyer</div></div>
+            <div class="kv"><div class="k">SD Name</div><div class="v">Settlement Domain</div></div>
+            <div class="kv"><div class="k">Demand Manager</div><div class="v">Kavya Ali</div></div>
+            <div class="kv"><div class="k">Priority</div><div class="v">P1</div></div>
+            <div class="kv"><div class="k">Delivery Tower</div><div class="v">Cards (primary)</div></div>
+            <div class="kv"><div class="k">Complexity</div><div class="v">High</div></div>
+            <div class="kv"><div class="k">Cut Effort</div><div class="v">29.2 PD</div></div>
+            <div class="kv"><div class="k">Testing Effort</div><div class="v">14.6 PD</div></div>
+          </div>
+          <div class="date-grid">
+            <div class="col head"></div>
+            <div class="col head">Planned</div>
+            <div class="col head">Actual</div>
+            <div class="col row-label">Dev End</div>
+            <div class="col mono">2025-08-12</div>
+            <div class="col mono">2025-08-15</div>
+            <div class="col row-label">SIT Start</div>
+            <div class="col mono">2025-08-16</div>
+            <div class="col mono">2025-08-18</div>
+            <div class="col row-label">SIT End</div>
+            <div class="col mono">2025-08-30</div>
+            <div class="col mono slip">2025-09-04</div>
+            <div class="col row-label">Deployment</div>
+            <div class="col mono">2025-09-15</div>
+            <div class="col mono">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="section-title">Test Design</div></div>
+        <div class="card-block">
+          <div class="kv-grid">
+            <div class="kv"><div class="k">Designer</div><div class="v">Daniel Das</div></div>
+            <div class="kv"><div class="k">SIT Plan Key</div><div class="v mono">TP-3402</div></div>
+            <div class="kv"><div class="k">Dynamic Plan Key</div><div class="v mono">TP-3403</div></div>
+            <div class="kv"><div class="k">Approval Status</div><div class="v"><span class="pill success"><span class="dot"></span>Approved</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Execution tab -->
+    <div class="tab-content" id="tab-execution">
+      <div class="section">
+        <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
+        <div class="card-block exec-grid">
+          <table class="data">
+            <thead>
+              <tr><th></th><th class="num">Total</th><th class="num">Pass</th><th class="num">Failed</th><th class="num">Blocked</th><th class="num">In progress</th><th class="num">Not started</th><th class="num">Descoped</th><th class="num">Moved to preprod</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Progression count</td><td class="num">142</td><td class="num">98</td><td class="num">12</td><td class="num">5</td><td class="num">18</td><td class="num">7</td><td class="num">2</td><td class="num">0</td></tr>
+              <tr><td>Progression %</td><td class="num">100%</td><td class="num">69%</td><td class="num">8%</td><td class="num">4%</td><td class="num">13%</td><td class="num">5%</td><td class="num">1%</td><td class="num">0%</td></tr>
+              <tr><td>Dynamic count</td><td class="num">38</td><td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">0</td></tr>
+              <tr><td>Dynamic %</td><td class="num">100%</td><td class="num">58%</td><td class="num">11%</td><td class="num">5%</td><td class="num">21%</td><td class="num">5%</td><td class="num">0%</td><td class="num">0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="section-title">Defects — Breached threshold</div></div>
+        <div class="card-block defect-matrix">
+          <table class="data">
+            <thead>
+              <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing issue</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>P1</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+              <tr><td>P2</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td class="num">0</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr>
+              <tr><td>P3 + P4</td><td class="num">7</td><td class="num">4</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+              <tr><td>Total</td><td class="num">17</td><td class="num">9</td><td class="num">8</td><td class="num">2</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">1</td><td class="num">0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Defects tab -->
+    <div class="tab-content" id="tab-defects">
+      <div class="section">
+        <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open</div></div>
+        <div class="card-block">
+          <table class="data">
+            <thead>
+              <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th class="num">Aging</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="id-link">PDI-1118</span></td><td>Notification engine</td><td><span class="pill danger">P1</span></td><td>Open</td><td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">TC-042, TC-051</td><td class="num">14</td></tr>
+              <tr><td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td><td><span class="pill danger">P1</span></td><td>In review</td><td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td><td class="mono">TC-067</td><td class="num">11</td></tr>
+              <tr><td><span class="id-link">PDI-1117</span></td><td>Statement export</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td><td class="mono">—</td><td class="num">10</td></tr>
+              <tr><td><span class="id-link">PDI-1119</span></td><td>Audit log</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td><td class="mono">TC-089</td><td class="num">8</td></tr>
+              <tr><td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td><td><span class="pill warning">P2</span></td><td>Open</td><td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td><td class="mono">—</td><td class="num">5</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PATTERN C: Two-pane sticky context -->
+  <!-- ============================================================ -->
+  <div class="pattern-pane" id="pattern-c">
+
+    <div class="pattern-note"><strong>Pattern C:</strong> CR identity + key facts stay sticky on the left. Detail sections scroll on the right.</div>
+
+    <div class="two-pane">
+      <aside class="sidebar">
+        <div class="id-large">CR-686</div>
+        <div class="summary-line">Audit log retention</div>
+        <span class="pill warning"><span class="dot"></span>In progress</span>
+
+        <div class="sb-list">
+          <div class="row"><span class="k">ITPM</span><span class="v">Layla Iyer</span></div>
+          <div class="row"><span class="k">Test Designer</span><span class="v">Daniel Das</span></div>
+          <div class="row"><span class="k">Test Lead</span><span class="v">Hiroshi Park</span></div>
+          <div class="row"><span class="k">Priority</span><span class="v">P1</span></div>
+          <div class="row"><span class="k">Complexity</span><span class="v">High</span></div>
+          <div class="row"><span class="k">Cut effort</span><span class="v">29.2 PD</span></div>
+        </div>
+
+        <div class="sb-list">
+          <div class="row"><span class="k">SIT planned</span><span class="v mono">Aug 30</span></div>
+          <div class="row"><span class="k">SIT actual</span><span class="v mono" style="color: hsl(var(--warning));">Sep 04</span></div>
+          <div class="row"><span class="k">Deploy planned</span><span class="v mono">Sep 15</span></div>
+        </div>
+      </aside>
+
+      <div class="content">
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Test Design</div></div>
+          <div class="card-block">
+            <div class="kv-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="kv"><div class="k">SIT Plan Key</div><div class="v mono">TP-3402</div></div>
+              <div class="kv" style="border-right: none;"><div class="k">Dynamic Plan Key</div><div class="v mono">TP-3403</div></div>
+              <div class="kv" style="border-top: 1px solid hsl(var(--border));"><div class="k">Designer</div><div class="v">Daniel Das</div></div>
+              <div class="kv" style="border-right: none; border-top: 1px solid hsl(var(--border));"><div class="k">Approval Status</div><div class="v"><span class="pill success"><span class="dot"></span>Approved</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
+          <div class="card-block exec-grid" style="overflow-x: auto;">
+            <table class="data">
+              <thead>
+                <tr><th></th><th class="num">Total</th><th class="num">Pass</th><th class="num">Failed</th><th class="num">Blocked</th><th class="num">In prog</th><th class="num">Not started</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Progression</td><td class="num">142</td><td class="num">98</td><td class="num">12</td><td class="num">5</td><td class="num">18</td><td class="num">7</td></tr>
+                <tr><td>Progression %</td><td class="num">100%</td><td class="num">69%</td><td class="num">8%</td><td class="num">4%</td><td class="num">13%</td><td class="num">5%</td></tr>
+                <tr><td>Dynamic</td><td class="num">38</td><td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">8</td><td class="num">2</td></tr>
+                <tr><td>Dynamic %</td><td class="num">100%</td><td class="num">58%</td><td class="num">11%</td><td class="num">5%</td><td class="num">21%</td><td class="num">5%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Defects — Breached threshold</div></div>
+          <div class="card-block defect-matrix" style="overflow-x: auto;">
+            <table class="data">
+              <thead>
+                <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Func.</th><th class="num">Env.</th><th class="num">Design</th><th class="num">Existing</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>P1</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+                <tr><td>P2</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td class="num">0</td><td class="num">1</td><td class="num">1</td></tr>
+                <tr><td>P3 + P4</td><td class="num">7</td><td class="num">4</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">0</td></tr>
+                <tr><td>Total</td><td class="num">17</td><td class="num">9</td><td class="num">8</td><td class="num">2</td><td class="num">3</td><td class="num">1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open</div></div>
+          <div class="card-block" style="overflow-x: auto;">
+            <table class="data">
+              <thead>
+                <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Assignee</th><th class="num">Aging</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><span class="id-link">PDI-1118</span></td><td>Notification engine</td><td><span class="pill danger">P1</span></td><td>Open</td><td>Hiroshi Park</td><td class="num">14</td></tr>
+                <tr><td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td><td><span class="pill danger">P1</span></td><td>In review</td><td>Daniel Das</td><td class="num">11</td></tr>
+                <tr><td><span class="id-link">PDI-1117</span></td><td>Statement export</td><td><span class="pill warning">P2</span></td><td>Open</td><td>Layla Iyer</td><td class="num">10</td></tr>
+                <tr><td><span class="id-link">PDI-1119</span></td><td>Audit log</td><td><span class="pill warning">P2</span></td><td>Open</td><td>Daniel Das</td><td class="num">8</td></tr>
+                <tr><td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td><td><span class="pill warning">P2</span></td><td>Open</td><td>Hiroshi Park</td><td class="num">5</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  // Theme toggle
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  let saved = 'light';
+  try {
+    saved = localStorage.getItem('cr360-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch (e) {}
+  root.classList.toggle('dark', saved === 'dark');
+  themeToggle.addEventListener('click', () => {
+    const next = root.classList.contains('dark') ? 'light' : 'dark';
+    try { localStorage.setItem('cr360-theme', next); } catch (e) {}
+    root.classList.toggle('dark', next === 'dark');
+  });
+
+  // Searchable combobox (CR ID)
+  (function() {
+    const combobox = document.getElementById('crCombobox');
+    if (!combobox) return;
+    const trigger = combobox.querySelector('.combobox-trigger');
+    const popover = combobox.querySelector('.combobox-popover');
+    const search = combobox.querySelector('.combobox-search');
+    const list = combobox.querySelector('.combobox-list');
+    const empty = combobox.querySelector('.combobox-empty');
+    const valueEl = combobox.querySelector('.combobox-value');
+
+    function filterOptions(q) {
+      const lower = q.toLowerCase();
+      let visible = 0;
+      list.querySelectorAll('.combobox-option').forEach(opt => {
+        const match = opt.textContent.toLowerCase().includes(lower);
+        opt.hidden = !match;
+        if (match) visible++;
+      });
+      empty.hidden = visible > 0;
+    }
+    function open() {
+      popover.hidden = false;
+      search.value = '';
+      filterOptions('');
+      setTimeout(() => search.focus(), 0);
+    }
+    function close() { popover.hidden = true; }
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (popover.hidden) open(); else close();
+    });
+    search.addEventListener('input', e => filterOptions(e.target.value));
+    search.addEventListener('click', e => e.stopPropagation());
+    list.addEventListener('click', e => {
+      const opt = e.target.closest('.combobox-option');
+      if (!opt) return;
+      valueEl.textContent = opt.dataset.value;
+      list.querySelectorAll('.combobox-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      close();
+    });
+    document.addEventListener('click', e => {
+      if (!combobox.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close();
+    });
+  })();
+
+  // Pattern switcher
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const p = btn.dataset.pattern;
+      document.querySelectorAll('.pattern-pane').forEach(pane => pane.classList.remove('active'));
+      document.getElementById('pattern-' + p).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // Tab switcher (Pattern B)
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const t = btn.dataset.tab;
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + t).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

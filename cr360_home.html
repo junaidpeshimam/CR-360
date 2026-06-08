@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CR 360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --border: 240 5.9% 90%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --brand: 243 75% 59%;
+    --brand-foreground: 0 0% 100%;
+    --radius: 0.625rem;
+  }
+  html.dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 6% 6%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --border: 240 3.7% 15.9%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --brand: 239 84% 67%;
+    --brand-foreground: 0 0% 100%;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    font-size: 14px;
+    transition: background 150ms, color 150ms;
+  }
+  .mono { font-family: 'Geist Mono', monospace; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Lucide SVG sizing */
+  .icon { width: 16px; height: 16px; stroke-width: 2; flex-shrink: 0; }
+  .icon-sm { width: 14px; height: 14px; }
+
+  nav.topnav {
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    position: sticky; top: 0; z-index: 50;
+  }
+  nav.topnav .inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .brand { display: flex; align-items: center; }
+  .brand .name {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: hsl(var(--brand));
+    font-family: 'Geist', sans-serif;
+    font-feature-settings: 'tnum';
+  }
+
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 12px;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: transparent;
+    color: hsl(var(--foreground));
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 100ms;
+    line-height: 1;
+  }
+  .btn:hover { background: hsl(var(--muted)); }
+  .btn-primary {
+    background: hsl(var(--brand));
+    color: hsl(var(--brand-foreground));
+    border-color: hsl(var(--brand));
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-icon { width: 32px; padding: 0; justify-content: center; }
+
+  /* Theme icon swap */
+  html.dark .icon-sun { display: none; }
+  html:not(.dark) .icon-moon { display: none; }
+
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 48px 0 32px;
+  }
+  @media (min-width: 900px) {
+    .module-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .module-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 100ms, background 100ms;
+    text-decoration: none;
+    color: inherit;
+    display: flex; flex-direction: column;
+    min-height: 140px;
+  }
+  .module-card:hover {
+    border-color: hsl(var(--brand));
+  }
+  .module-card.disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+  .module-card.disabled:hover { border-color: hsl(var(--border)); }
+
+  .card-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: hsl(var(--muted));
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .card-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .card-desc { font-size: 13px; color: hsl(var(--muted-foreground)); line-height: 1.5; }
+
+  footer.app-footer {
+    border-top: 1px solid hsl(var(--border));
+    padding: 16px 0;
+    margin-top: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: hsl(var(--muted-foreground));
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="container inner">
+    <div class="brand">
+      <div class="name">CR 360</div>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-icon" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon icon-sm icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        <svg class="icon icon-sm icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="btn btn-primary">
+        <svg class="icon icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+        Refresh
+      </button>
+      <button class="btn">
+        Sign out
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div class="module-grid">
+
+    <a class="module-card" href="./cr360_crview_patterns.html">
+      <div class="card-icon">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+      </div>
+      <div class="card-title">CR View</div>
+      <div class="card-desc">Per-CR details, test design, execution and defects.</div>
+    </a>
+
+    <a class="module-card" href="#">
+      <div class="card-icon">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+      </div>
+      <div class="card-title">Capacity &amp; planning</div>
+      <div class="card-desc">Monthly effort, headcount and utilization per tower.</div>
+    </a>
+
+    <a class="module-card" href="#">
+      <div class="card-icon">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <div class="card-title">Regression readiness</div>
+      <div class="card-desc">Regression coverage and risk signals per release.</div>
+    </a>
+
+    <a class="module-card disabled">
+      <div class="card-icon">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+      </div>
+      <div class="card-title">Daily status</div>
+      <div class="card-desc">Automated daily reports across all towers.</div>
+    </a>
+
+    <a class="module-card disabled">
+      <div class="card-icon">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16h.01"/><path d="M12 8v4"/><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"/></svg>
+      </div>
+      <div class="card-title">CR compliance</div>
+      <div class="card-desc">Compliance audit per CR with severity flags.</div>
+    </a>
+
+    <a class="module-card disabled">
+      <div class="card-icon">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
+      </div>
+      <div class="card-title">Signoff reports</div>
+      <div class="card-desc">Release readiness and compliance signoffs.</div>
+    </a>
+
+  </div>
+
+  <footer class="app-footer">
+    <span>CR 360</span>
+    <span class="mono">v0.1</span>
+  </footer>
+
+</main>
+
+<script>
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+
+  let saved = 'light';
+  try {
+    saved = localStorage.getItem('cr360-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch (e) {}
+  root.classList.toggle('dark', saved === 'dark');
+
+  toggle.addEventListener('click', () => {
+    const next = root.classList.contains('dark') ? 'light' : 'dark';
+    try { localStorage.setItem('cr360-theme', next); } catch (e) {}
+    root.classList.toggle('dark', next === 'dark');
+  });
+</script>
+
+</body>
+</html>
