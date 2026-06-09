@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CR 360 — CR View (v4)</title>
+<title>CR 360 — CR View patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
 <style>
   :root {
     --background: 0 0% 100%;
@@ -59,7 +59,7 @@
   .icon { width: 16px; height: 16px; stroke-width: 2; flex-shrink: 0; }
   .icon-sm { width: 14px; height: 14px; }
 
-  /* Nav */
+  /* Top nav */
   nav.topnav {
     border-bottom: 1px solid hsl(var(--border));
     background: hsl(var(--background));
@@ -69,13 +69,14 @@
     display: flex; align-items: center; justify-content: space-between;
     height: 56px;
   }
-  .brand { display: flex; align-items: center; text-decoration: none; }
   .brand .name {
     font-size: 19px; font-weight: 600;
     letter-spacing: -0.025em;
     color: hsl(var(--brand));
   }
   .nav-actions { display: flex; align-items: center; gap: 8px; }
+
+  /* Buttons */
   .btn {
     display: inline-flex; align-items: center; gap: 6px;
     height: 32px; padding: 0 12px;
@@ -98,19 +99,9 @@
   html.dark .icon-sun { display: none; }
   html:not(.dark) .icon-moon { display: none; }
 
-  /* Crumb + selectors */
-  .crumb-bar {
-    padding: 14px 0;
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12px; color: hsl(var(--muted-foreground));
-  }
-  .crumb-bar a { color: inherit; text-decoration: none; transition: color 100ms; }
-  .crumb-bar a:hover { color: hsl(var(--foreground)); }
-  .crumb-sep { opacity: 0.4; }
-  .crumb-current { color: hsl(var(--foreground)); font-weight: 500; }
-
+  /* Selectors row */
   .selectors {
-    padding: 16px 0 24px;
+    padding: 24px 0;
     display: flex; gap: 12px; align-items: end;
     flex-wrap: wrap;
     border-bottom: 1px solid hsl(var(--border));
@@ -133,7 +124,32 @@
   }
   .selectors-spacer { flex: 1; }
 
-  /* Combobox */
+  /* Pattern switcher */
+  .mode-switcher {
+    padding: 16px 0;
+    display: flex; gap: 6px; align-items: center;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .mode-switcher .label {
+    font-size: 12px; color: hsl(var(--muted-foreground)); margin-right: 8px;
+  }
+  .mode-btn {
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: transparent;
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    color: hsl(var(--muted-foreground));
+  }
+  .mode-btn:hover { background: hsl(var(--muted)); }
+  .mode-btn.active {
+    background: hsl(var(--brand));
+    color: hsl(var(--brand-foreground));
+    border-color: hsl(var(--brand));
+  }
+
+  /* Searchable combobox (CR ID) */
   .combobox { position: relative; min-width: 320px; }
   .combobox-trigger {
     width: 100%;
@@ -144,45 +160,69 @@
     background: hsl(var(--background));
     font-family: inherit; font-size: 13px;
     color: hsl(var(--foreground));
-    text-align: left; cursor: pointer; gap: 8px;
+    text-align: left;
+    cursor: pointer;
+    gap: 8px;
   }
   .combobox-trigger:hover { background: hsl(var(--muted) / 0.5); }
   .combobox-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .combobox-chevron { flex-shrink: 0; width: 14px; height: 14px; opacity: 0.6; }
   .combobox-popover {
-    position: absolute; top: calc(100% + 4px); left: 0;
+    position: absolute;
+    top: calc(100% + 4px); left: 0;
     width: 100%;
     background: hsl(var(--background));
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     box-shadow: 0 8px 24px -8px hsl(var(--foreground) / 0.15);
-    z-index: 100; overflow: hidden;
+    z-index: 100;
+    overflow: hidden;
     display: flex; flex-direction: column;
     max-height: 320px;
   }
   .combobox-popover[hidden] { display: none; }
   .combobox-search {
-    width: 100%; height: 36px; padding: 0 12px;
-    border: none; border-bottom: 1px solid hsl(var(--border));
-    background: transparent; color: hsl(var(--foreground));
-    font-family: inherit; font-size: 13px; outline: none;
+    width: 100%; height: 36px;
+    padding: 0 12px;
+    border: none;
+    border-bottom: 1px solid hsl(var(--border));
+    background: transparent;
+    color: hsl(var(--foreground));
+    font-family: inherit; font-size: 13px;
+    outline: none;
   }
-  .combobox-list { flex: 1; overflow-y: auto; padding: 4px; }
+  .combobox-search::placeholder { color: hsl(var(--muted-foreground)); }
+  .combobox-list {
+    flex: 1; overflow-y: auto;
+    padding: 4px;
+  }
   .combobox-option {
-    width: 100%; display: block;
+    width: 100%;
+    display: block;
     padding: 8px 10px;
-    background: transparent; border: none;
+    background: transparent;
+    border: none;
     border-radius: 6px;
     font-family: inherit; font-size: 13px;
     color: hsl(var(--foreground));
-    text-align: left; cursor: pointer;
+    text-align: left;
+    cursor: pointer;
   }
   .combobox-option:hover { background: hsl(var(--muted)); }
   .combobox-option[hidden] { display: none; }
   .combobox-option.selected { background: hsl(var(--muted)); font-weight: 500; }
+  .combobox-empty {
+    padding: 16px;
+    font-size: 13px;
+    color: hsl(var(--muted-foreground));
+    text-align: center;
+  }
+  .combobox-empty[hidden] { display: none; }
 
-  /* Section + cards */
-  .pane { padding: 24px 0 48px; }
+  /* Shared section styles */
+  .pattern-pane { padding: 24px 0 48px; }
+  .pattern-pane:not(.active) { display: none; }
+
   .section { margin-bottom: 32px; }
   .section-head {
     display: flex; align-items: baseline; justify-content: space-between;
@@ -203,13 +243,13 @@
     overflow: hidden;
   }
 
-  /* CR banner */
+  /* CR header banner */
   .cr-banner {
     padding: 20px 24px;
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     background: hsl(var(--card));
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     display: flex; justify-content: space-between; align-items: flex-start;
     gap: 24px;
   }
@@ -223,6 +263,7 @@
   .cr-banner .left .summary {
     font-size: 16px; font-weight: 500;
     margin-top: 4px;
+    color: hsl(var(--foreground));
   }
   .cr-banner .left .sub {
     font-size: 12px; color: hsl(var(--muted-foreground));
@@ -240,9 +281,188 @@
   .pill.success { background: hsl(var(--success-bg)); color: hsl(var(--success)); }
   .pill.warning { background: hsl(var(--warning-bg)); color: hsl(var(--warning)); }
   .pill.danger { background: hsl(var(--danger-bg)); color: hsl(var(--danger)); }
+  .pill.muted { background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); }
   .pill .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
-  /* AI verdict */
+  /* Key-value grid */
+  .kv-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding: 4px 0;
+  }
+  .kv {
+    padding: 12px 16px;
+    border-right: 1px solid hsl(var(--border));
+  }
+  .kv:nth-child(4n) { border-right: none; }
+  .kv .k {
+    font-size: 11px; color: hsl(var(--muted-foreground));
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 4px; font-weight: 500;
+  }
+  .kv .v {
+    font-size: 14px; font-weight: 500; color: hsl(var(--foreground));
+  }
+
+  /* Date comparison rows */
+  .date-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .date-grid .col {
+    padding: 12px 16px;
+    border-right: 1px solid hsl(var(--border));
+    font-size: 13px;
+  }
+  .date-grid .col:last-child { border-right: none; }
+  .date-grid .head {
+    font-size: 11px; color: hsl(var(--muted-foreground));
+    text-transform: uppercase; letter-spacing: 0.05em;
+    background: hsl(var(--muted) / 0.4);
+    font-weight: 500;
+  }
+  .date-grid .row-label { color: hsl(var(--muted-foreground)); }
+  .date-grid .slip { color: hsl(var(--warning)); font-weight: 500; }
+
+  /* Tables */
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  /* ---------- Visual data components (stacked bar, heatmap, aging) ---------- */
+
+  /* Stacked horizontal bar for test execution */
+  .exec-group {
+    padding: 18px 20px;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .exec-group:last-child { border-bottom: none; }
+  .exec-group .exec-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .exec-group .exec-label .name {
+    font-size: 13px; font-weight: 500;
+  }
+  .exec-group .exec-label .total {
+    font-size: 12px; color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
+  }
+  .stacked-bar {
+    height: 10px;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    background: hsl(var(--muted));
+    margin-bottom: 12px;
+  }
+  .stacked-bar .seg { height: 100%; }
+  .stacked-bar .seg.pass { background: hsl(var(--success)); }
+  .stacked-bar .seg.fail { background: hsl(var(--danger)); }
+  .stacked-bar .seg.block { background: hsl(var(--warning)); }
+  .stacked-bar .seg.prog { background: hsl(var(--brand)); }
+  .stacked-bar .seg.idle { background: hsl(var(--muted-foreground) / 0.45); }
+  .stacked-bar .seg.descoped { background: hsl(var(--muted-foreground) / 0.22); }
+
+  .bar-legend {
+    display: flex; flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+  }
+  .bar-legend .item { display: flex; align-items: center; gap: 6px; }
+  .bar-legend .item .dot {
+    width: 9px; height: 9px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .bar-legend .item .val {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar-legend .item .pct {
+    color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
+    margin-left: 2px;
+  }
+
+  /* Heatmap cells for defect threshold */
+  table.heatmap td {
+    text-align: right;
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  table.heatmap td.row-label {
+    text-align: left;
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    background: hsl(var(--muted) / 0.4);
+  }
+  table.heatmap td.heat[data-level="0"] {
+    color: hsl(var(--muted-foreground));
+    opacity: 0.45;
+  }
+  table.heatmap td.heat[data-level="1"] { background: hsl(var(--brand) / 0.07); }
+  table.heatmap td.heat[data-level="2"] { background: hsl(var(--brand) / 0.15); }
+  table.heatmap td.heat[data-level="3"] { background: hsl(var(--brand) / 0.28); }
+  table.heatmap td.heat[data-level="4"] {
+    background: hsl(var(--brand) / 0.45);
+    color: hsl(var(--brand-foreground));
+    font-weight: 600;
+  }
+  /* Open column uses warning/danger scale */
+  table.heatmap td.heat-open[data-level="0"] { color: hsl(var(--muted-foreground)); opacity: 0.45; }
+  table.heatmap td.heat-open[data-level="1"] { background: hsl(var(--warning) / 0.1); }
+  table.heatmap td.heat-open[data-level="2"] { background: hsl(var(--warning) / 0.22); color: hsl(var(--warning)); font-weight: 500; }
+  table.heatmap td.heat-open[data-level="3"] { background: hsl(var(--warning) / 0.38); color: hsl(var(--warning)); font-weight: 600; }
+  table.heatmap td.heat-open[data-level="4"] {
+    background: hsl(var(--danger) / 0.45);
+    color: hsl(var(--brand-foreground));
+    font-weight: 700;
+  }
+  /* Total row emphasis */
+  table.heatmap tr.total-row td.row-label,
+  table.heatmap tr.total-row td.heat {
+    border-top: 1px solid hsl(var(--border));
+    font-weight: 600;
+  }
+
+  /* Aging bar in open defects */
+  .aging-cell {
+    display: flex; align-items: center;
+    gap: 8px;
+    min-width: 100px;
+  }
+  .aging-bar {
+    flex: 1;
+    height: 4px;
+    background: hsl(var(--muted));
+    border-radius: 2px;
+    overflow: hidden;
+    min-width: 50px;
+  }
+  .aging-bar .fill {
+    height: 100%;
+    border-radius: 2px;
+    background: hsl(var(--success));
+  }
+  .aging-bar .fill.amber { background: hsl(var(--warning)); }
+  .aging-bar .fill.red { background: hsl(var(--danger)); }
+  .aging-days {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    min-width: 28px;
+    text-align: right;
+    color: hsl(var(--foreground));
+  }
+
+  /* AI-generated verdict summary */
   .verdict-card {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
@@ -254,31 +474,45 @@
   .verdict-head {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 12px;
-    gap: 12px; flex-wrap: wrap;
+    gap: 12px;
+    flex-wrap: wrap;
   }
   .verdict-head .verdict-meta {
     display: inline-flex; align-items: center; gap: 5px;
-    font-size: 11px; color: hsl(var(--muted-foreground));
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
   }
-  .verdict-head .verdict-meta svg { color: hsl(var(--brand)); opacity: 0.9; }
-  .verdict-text { font-size: 14px; line-height: 1.65; }
-  .verdict-text strong { font-weight: 600; }
+  .verdict-head .verdict-meta svg {
+    color: hsl(var(--brand));
+    opacity: 0.9;
+  }
+  .verdict-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: hsl(var(--foreground));
+  }
+  .verdict-text strong {
+    font-weight: 600;
+  }
 
-  /* Timeline */
+  /* Schedule timeline */
   .timeline-block { padding: 32px 28px 24px; }
   .timeline-track {
-    position: relative; height: 3px;
+    position: relative;
+    height: 3px;
     background: hsl(var(--border));
     border-radius: 2px;
     margin: 16px 6% 36px;
   }
   .timeline-fill {
     position: absolute; top: 0; left: 0;
-    height: 100%; background: hsl(var(--brand));
+    height: 100%;
+    background: hsl(var(--brand));
     border-radius: 2px;
   }
   .timeline-markers {
-    position: absolute; top: -7px; left: 0; right: 0;
+    position: absolute;
+    top: -7px; left: 0; right: 0;
     display: flex; justify-content: space-between;
   }
   .timeline-marker {
@@ -297,291 +531,149 @@
     box-shadow: 0 0 0 4px hsl(var(--warning) / 0.18);
   }
   .timeline-labels {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    margin: 0 6%; gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0 6%;
+    gap: 8px;
   }
   .timeline-label { text-align: center; }
   .timeline-label .stage {
-    font-size: 11px; color: hsl(var(--muted-foreground));
-    text-transform: uppercase; letter-spacing: 0.06em;
-    margin-bottom: 6px; font-weight: 500;
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+    font-weight: 500;
   }
   .timeline-label .planned {
-    font-size: 12px; color: hsl(var(--muted-foreground));
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
     font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
     margin-bottom: 2px;
   }
   .timeline-label .actual {
-    font-size: 13px; font-weight: 500;
+    font-size: 13px;
+    font-weight: 500;
     font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
   }
   .timeline-label .actual.ok { color: hsl(var(--success)); }
   .timeline-label .actual.slip { color: hsl(var(--warning)); }
   .timeline-label .actual.future { color: hsl(var(--muted-foreground)); }
 
-  /* KV grid */
-  .kv-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    padding: 4px 0;
-  }
-  .kv {
-    padding: 12px 16px;
-    border-right: 1px solid hsl(var(--border));
-  }
-  .kv:nth-child(4n) { border-right: none; }
-  .kv .k {
-    font-size: 11px; color: hsl(var(--muted-foreground));
-    text-transform: uppercase; letter-spacing: 0.05em;
-    margin-bottom: 4px; font-weight: 500;
-  }
-  .kv .v { font-size: 14px; font-weight: 500; }
+  /* End visual data components */
 
-  /* ============== NEW V4 VIZ ============== */
-
-  /* WAFFLE CHART for test execution */
-  .waffle-section {
-    padding: 22px 24px;
-    border-bottom: 1px solid hsl(var(--border));
-  }
-  .waffle-section:last-child { border-bottom: none; }
-  .waffle-head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    margin-bottom: 14px;
-  }
-  .waffle-head .name { font-size: 14px; font-weight: 500; }
-  .waffle-head .summary {
-    font-size: 12px; color: hsl(var(--muted-foreground));
-    font-variant-numeric: tabular-nums;
-  }
-  .waffle-head .summary strong {
-    color: hsl(var(--foreground));
-    font-weight: 600;
-    font-family: 'Geist Mono', monospace;
-  }
-  .waffle {
-    display: grid;
-    grid-template-columns: repeat(20, 1fr);
-    gap: 3px;
-    margin-bottom: 14px;
-    max-width: 560px;
-  }
-  .waffle .cell {
-    aspect-ratio: 1;
-    border-radius: 2px;
-    background: hsl(var(--muted));
-    transition: transform 100ms;
-  }
-  .waffle .cell:hover {
-    transform: scale(1.4);
-    z-index: 1;
-  }
-  .waffle .cell.pass { background: hsl(var(--success)); }
-  .waffle .cell.fail { background: hsl(var(--danger)); }
-  .waffle .cell.block { background: hsl(var(--warning)); }
-  .waffle .cell.prog { background: hsl(var(--brand)); }
-  .waffle .cell.idle { background: hsl(var(--muted-foreground) / 0.42); }
-  .waffle .cell.descoped { background: hsl(var(--muted-foreground) / 0.22); }
-
-  .waffle-legend {
-    display: flex; flex-wrap: wrap;
-    gap: 6px 18px;
-    font-size: 12px; color: hsl(var(--muted-foreground));
-  }
-  .waffle-legend .item { display: flex; align-items: center; gap: 6px; }
-  .waffle-legend .item .dot {
-    width: 9px; height: 9px; border-radius: 2px;
-  }
-  .waffle-legend .item .val {
-    color: hsl(var(--foreground));
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* BUBBLE MATRIX for defect threshold */
-  table.bubble-grid {
-    width: 100%; border-collapse: collapse;
-  }
-  table.bubble-grid th {
-    text-align: center;
-    padding: 12px 8px;
+  table.data th {
+    text-align: left;
+    padding: 10px 14px;
     font-size: 11px; font-weight: 500;
     color: hsl(var(--muted-foreground));
     text-transform: uppercase; letter-spacing: 0.05em;
     background: hsl(var(--muted) / 0.4);
     border-bottom: 1px solid hsl(var(--border));
   }
-  table.bubble-grid th:first-child {
-    text-align: left; padding-left: 16px;
-  }
-  table.bubble-grid td {
-    padding: 18px 8px;
-    text-align: center;
-    vertical-align: middle;
+  table.data td {
+    padding: 10px 14px;
     border-bottom: 1px solid hsl(var(--border));
+    font-variant-numeric: tabular-nums;
   }
-  table.bubble-grid td:first-child {
-    text-align: left; padding-left: 16px;
-    font-weight: 500;
+  table.data tr:last-child td { border-bottom: none; }
+  table.data td.num { text-align: right; font-family: 'Geist Mono', monospace; }
+  table.data th.num { text-align: right; }
+  table.data td .id-link { color: hsl(var(--brand)); font-family: 'Geist Mono', monospace; }
+
+  /* Test execution mini grid */
+  .exec-grid table.data th:first-child,
+  .exec-grid table.data td:first-child {
+    font-weight: 500; color: hsl(var(--foreground));
     background: hsl(var(--muted) / 0.4);
   }
-  table.bubble-grid tr:last-child td { border-bottom: none; }
-  table.bubble-grid tr.total-row td {
-    background: hsl(var(--muted) / 0.6);
-    border-top: 1px solid hsl(var(--border));
-    font-weight: 600;
+
+  /* Defect threshold matrix */
+  .defect-matrix table.data td:first-child {
+    font-weight: 500; background: hsl(var(--muted) / 0.4);
   }
 
-  .bubble {
-    display: inline-flex;
-    align-items: center; justify-content: center;
-    border-radius: 50%;
-    background: hsl(var(--brand));
-    color: hsl(var(--brand-foreground));
-    font-family: 'Geist Mono', monospace;
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    line-height: 1;
+  /* Tabs (Pattern B) */
+  .tabs-strip {
+    display: flex; gap: 4px;
+    border-bottom: 1px solid hsl(var(--border));
+    margin-bottom: 24px;
   }
-  .bubble.open { background: hsl(var(--warning)); }
-  .bubble.high-open { background: hsl(var(--danger)); }
-  .bubble.zero {
+  .tab-btn {
+    padding: 10px 16px;
     background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: inherit; font-size: 14px; font-weight: 500;
     color: hsl(var(--muted-foreground));
-    opacity: 0.35;
-    font-weight: 400;
+    cursor: pointer;
+    margin-bottom: -1px;
   }
+  .tab-btn:hover { color: hsl(var(--foreground)); }
+  .tab-btn.active {
+    color: hsl(var(--brand));
+    border-bottom-color: hsl(var(--brand));
+  }
+  .tab-content:not(.active) { display: none; }
 
-  /* AGE HISTOGRAM for open defects */
-  .defect-block {
+  /* Two pane (Pattern C) */
+  .two-pane {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .two-pane .sidebar {
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .age-hist-wrap {
-    padding: 20px 24px;
-    border-bottom: 1px solid hsl(var(--border));
+    padding: 20px;
     background: hsl(var(--card));
+    position: sticky; top: 80px;
   }
-  .age-hist-head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    margin-bottom: 16px;
+  .two-pane .sidebar .id-large {
+    font-size: 22px; font-weight: 600;
+    color: hsl(var(--brand));
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
   }
-  .age-hist-head .label {
-    font-size: 12px; color: hsl(var(--muted-foreground));
+  .two-pane .sidebar .summary-line {
+    font-size: 14px; margin-bottom: 14px;
+  }
+  .two-pane .sidebar .sb-list {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .two-pane .sidebar .sb-list .row {
+    display: flex; justify-content: space-between; font-size: 12px;
+  }
+  .two-pane .sidebar .sb-list .row .k {
+    color: hsl(var(--muted-foreground));
+  }
+  .two-pane .sidebar .sb-list .row .v {
     font-weight: 500;
-    text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  .age-hist-head .insight {
-    font-size: 12px; color: hsl(var(--muted-foreground));
-  }
-  .age-hist-head .insight strong { color: hsl(var(--warning)); font-weight: 600; }
-  .age-hist {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 18px; align-items: end;
-    height: 92px;
-  }
-  .age-bucket {
-    display: flex; flex-direction: column;
-    align-items: center;
-    height: 100%;
-    gap: 6px;
-  }
-  .age-bucket .count {
-    font-size: 13px; font-weight: 500;
-    font-variant-numeric: tabular-nums;
-    color: hsl(var(--foreground));
-  }
-  .age-bucket .count.zero { color: hsl(var(--muted-foreground)); opacity: 0.5; }
-  .age-bucket .bar-wrap {
-    flex: 1; width: 100%;
-    display: flex; align-items: flex-end;
-    padding: 0 12%;
-  }
-  .age-bucket .bar {
-    width: 100%;
-    background: hsl(var(--brand));
-    border-radius: 3px 3px 0 0;
-    min-height: 2px;
-  }
-  .age-bucket .bar.warn { background: hsl(var(--warning)); }
-  .age-bucket .bar.danger { background: hsl(var(--danger)); }
-  .age-bucket .bar.muted { background: hsl(var(--muted-foreground) / 0.25); }
-  .age-bucket .bucket-label {
-    font-size: 11px; color: hsl(var(--muted-foreground));
-    text-transform: uppercase; letter-spacing: 0.05em;
-    text-align: center;
-    margin-top: 6px;
   }
 
-  /* Defect rows (replacing table) */
-  .defect-list {
-    display: flex; flex-direction: column;
-    gap: 1px;
-    background: hsl(var(--border));
-  }
-  .defect-row {
-    background: hsl(var(--card));
-    padding: 14px 20px;
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    gap: 16px;
-    align-items: center;
-  }
-  .defect-row:hover { background: hsl(var(--muted) / 0.3); }
-  .defect-row .pri-pill {
-    font-size: 11px; font-weight: 600;
-    padding: 3px 8px; border-radius: 4px;
-    font-family: 'Geist Mono', monospace;
-    width: 30px; text-align: center;
-  }
-  .defect-row .pri-pill.p1 { background: hsl(var(--danger-bg)); color: hsl(var(--danger)); }
-  .defect-row .pri-pill.p2 { background: hsl(var(--warning-bg)); color: hsl(var(--warning)); }
-  .defect-row .defect-title {
-    font-size: 13px; font-weight: 500;
-    margin-bottom: 3px;
-  }
-  .defect-row .defect-title .id {
-    font-family: 'Geist Mono', monospace;
-    color: hsl(var(--brand));
-    font-weight: 500;
-    margin-right: 8px;
-  }
-  .defect-row .defect-meta {
-    font-size: 12px; color: hsl(var(--muted-foreground));
-  }
-  .defect-row .defect-meta .blocked {
-    color: hsl(var(--warning));
-    font-family: 'Geist Mono', monospace;
-  }
-  .defect-row .assignee {
+  /* Pattern label intro */
+  .pattern-note {
+    padding: 12px 16px;
+    background: hsl(var(--muted) / 0.4);
+    border-radius: var(--radius);
     font-size: 12px;
     color: hsl(var(--muted-foreground));
-    text-align: right;
-    min-width: 80px;
+    margin-bottom: 24px;
   }
-  .defect-row .assignee .name {
-    color: hsl(var(--foreground));
-    font-weight: 500;
-    font-size: 13px;
-  }
-  .defect-row .age {
-    font-family: 'Geist Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    min-width: 36px;
-    text-align: right;
-  }
-  .defect-row .age.warn { color: hsl(var(--warning)); }
-  .defect-row .age.danger { color: hsl(var(--danger)); }
+  .pattern-note strong { color: hsl(var(--foreground)); font-weight: 500; }
 </style>
 </head>
 <body>
 
 <nav class="topnav">
   <div class="container inner">
-    <a href="./cr360_home.html" class="brand">
+    <a href="./cr360_home.html" class="brand" style="text-decoration: none;">
       <div class="name">CR 360</div>
     </a>
     <div class="nav-actions">
@@ -593,19 +685,17 @@
         <svg class="icon icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
         Refresh
       </button>
-      <button class="btn">Sign out</button>
+      <button class="btn">
+        <svg class="icon icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Export
+      </button>
     </div>
   </div>
 </nav>
 
 <main class="container">
 
-  <div class="crumb-bar">
-    <a href="./cr360_home.html">Home</a>
-    <span class="crumb-sep">/</span>
-    <span class="crumb-current">CR View</span>
-  </div>
-
+  <!-- Selectors -->
   <div class="selectors">
     <div class="select-group">
       <label>Tower</label>
@@ -641,11 +731,15 @@
             <button type="button" class="combobox-option" data-value="CR-601 — Fraud rule update">CR-601 — Fraud rule update</button>
             <button type="button" class="combobox-option" data-value="CR-602 — Card tokenization">CR-602 — Card tokenization</button>
             <button type="button" class="combobox-option" data-value="CR-603 — Mobile dashboard">CR-603 — Mobile dashboard</button>
+            <button type="button" class="combobox-option" data-value="CR-617 — Limit recalculation">CR-617 — Limit recalculation</button>
+            <button type="button" class="combobox-option" data-value="CR-628 — API gateway upgrade">CR-628 — API gateway upgrade</button>
             <button type="button" class="combobox-option" data-value="CR-633 — Audit log retention">CR-633 — Audit log retention</button>
             <button type="button" class="combobox-option" data-value="CR-660 — SSO integration">CR-660 — SSO integration</button>
             <button type="button" class="combobox-option" data-value="CR-696 — Mobile dashboard">CR-696 — Mobile dashboard</button>
             <button type="button" class="combobox-option" data-value="CR-728 — Rate engine patch">CR-728 — Rate engine patch</button>
+            <button type="button" class="combobox-option" data-value="CR-733 — Audit log retention">CR-733 — Audit log retention</button>
           </div>
+          <div class="combobox-empty" hidden>No CRs match.</div>
         </div>
       </div>
     </div>
@@ -655,7 +749,20 @@
     </div>
   </div>
 
-  <div class="pane">
+  <!-- Mode switcher -->
+  <div class="mode-switcher">
+    <span class="label">Layout pattern:</span>
+    <button class="mode-btn active" data-pattern="a">A — Single scroll</button>
+    <button class="mode-btn" data-pattern="b">B — Three tabs</button>
+    <button class="mode-btn" data-pattern="c">C — Two-pane sticky</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PATTERN A: Single scrollable page -->
+  <!-- ============================================================ -->
+  <div class="pattern-pane active" id="pattern-a">
+
+    <div class="pattern-note"><strong>Pattern A:</strong> all 5 sections stacked top-to-bottom. Scroll to see everything. Zero clicks, but a long page.</div>
 
     <!-- CR banner -->
     <div class="cr-banner">
@@ -669,7 +776,7 @@
       </div>
     </div>
 
-    <!-- AI verdict -->
+    <!-- AI verdict summary -->
     <div class="verdict-card">
       <div class="verdict-head">
         <span class="pill warning"><span class="dot"></span>At risk</span>
@@ -683,7 +790,9 @@
 
     <!-- CR Details -->
     <div class="section">
-      <div class="section-head"><div class="section-title">CR Details</div></div>
+      <div class="section-head">
+        <div class="section-title">CR Details</div>
+      </div>
       <div class="card-block">
         <div class="kv-grid">
           <div class="kv"><div class="k">ITPM</div><div class="v">Layla Iyer</div></div>
@@ -698,7 +807,7 @@
       </div>
     </div>
 
-    <!-- Timeline -->
+    <!-- Schedule timeline -->
     <div class="section">
       <div class="section-head"><div class="section-title">Schedule</div></div>
       <div class="card-block timeline-block">
@@ -712,10 +821,26 @@
           </div>
         </div>
         <div class="timeline-labels">
-          <div class="timeline-label"><div class="stage">Dev end</div><div class="planned">planned Aug 12</div><div class="actual ok">actual Aug 15</div></div>
-          <div class="timeline-label"><div class="stage">SIT start</div><div class="planned">planned Aug 16</div><div class="actual ok">actual Aug 18</div></div>
-          <div class="timeline-label"><div class="stage">SIT end</div><div class="planned">planned Aug 30</div><div class="actual slip">at risk · +5d</div></div>
-          <div class="timeline-label"><div class="stage">Deploy</div><div class="planned">planned Sep 15</div><div class="actual future">future</div></div>
+          <div class="timeline-label">
+            <div class="stage">Dev end</div>
+            <div class="planned">planned Aug 12</div>
+            <div class="actual ok">actual Aug 15</div>
+          </div>
+          <div class="timeline-label">
+            <div class="stage">SIT start</div>
+            <div class="planned">planned Aug 16</div>
+            <div class="actual ok">actual Aug 18</div>
+          </div>
+          <div class="timeline-label">
+            <div class="stage">SIT end</div>
+            <div class="planned">planned Aug 30</div>
+            <div class="actual slip">at risk · +5d</div>
+          </div>
+          <div class="timeline-label">
+            <div class="stage">Deploy</div>
+            <div class="planned">planned Sep 15</div>
+            <div class="actual future">future</div>
+          </div>
         </div>
       </div>
     </div>
@@ -733,197 +858,661 @@
       </div>
     </div>
 
-    <!-- TEST EXECUTION — WAFFLE CHART -->
+    <!-- Test Execution -->
     <div class="section">
-      <div class="section-head">
-        <div class="section-title">Test Execution — SIT</div>
-        <div class="section-action">Each square = 1 test · hover to highlight</div>
-      </div>
+      <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
       <div class="card-block">
-        <div class="waffle-section">
-          <div class="waffle-head">
+        <div class="exec-group">
+          <div class="exec-label">
             <span class="name">Progression</span>
-            <span class="summary">142 tests · <strong>69%</strong> pass rate · <strong>23</strong> remaining</span>
+            <span class="total">142 tests · 69% pass rate</span>
           </div>
-          <div class="waffle" data-waffle='{"pass":98,"fail":12,"block":5,"prog":18,"idle":7,"descoped":2}'></div>
-          <div class="waffle-legend">
-            <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">98</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">12</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">5</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">18</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.42);"></div>Not started <span class="val">7</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.22);"></div>Descoped <span class="val">2</span></div>
+          <div class="stacked-bar">
+            <div class="seg pass" style="width: 69.0%;" title="Pass: 98"></div>
+            <div class="seg fail" style="width: 8.5%;" title="Failed: 12"></div>
+            <div class="seg block" style="width: 3.5%;" title="Blocked: 5"></div>
+            <div class="seg prog" style="width: 12.7%;" title="In progress: 18"></div>
+            <div class="seg idle" style="width: 4.9%;" title="Not started: 7"></div>
+            <div class="seg descoped" style="width: 1.4%;" title="Descoped: 2"></div>
+          </div>
+          <div class="bar-legend">
+            <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">98</span><span class="pct">69%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">12</span><span class="pct">8%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">5</span><span class="pct">4%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">18</span><span class="pct">13%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">7</span><span class="pct">5%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.22);"></div>Descoped <span class="val">2</span><span class="pct">1%</span></div>
           </div>
         </div>
-        <div class="waffle-section">
-          <div class="waffle-head">
+        <div class="exec-group">
+          <div class="exec-label">
             <span class="name">Dynamic</span>
-            <span class="summary">38 tests · <strong>58%</strong> pass rate · <strong>10</strong> remaining</span>
+            <span class="total">38 tests · 58% pass rate</span>
           </div>
-          <div class="waffle" data-waffle='{"pass":22,"fail":4,"block":2,"prog":8,"idle":2}'></div>
-          <div class="waffle-legend">
-            <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">22</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">4</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">2</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">8</span></div>
-            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.42);"></div>Not started <span class="val">2</span></div>
+          <div class="stacked-bar">
+            <div class="seg pass" style="width: 57.9%;" title="Pass: 22"></div>
+            <div class="seg fail" style="width: 10.5%;" title="Failed: 4"></div>
+            <div class="seg block" style="width: 5.3%;" title="Blocked: 2"></div>
+            <div class="seg prog" style="width: 21.0%;" title="In progress: 8"></div>
+            <div class="seg idle" style="width: 5.3%;" title="Not started: 2"></div>
+          </div>
+          <div class="bar-legend">
+            <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">22</span><span class="pct">58%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">4</span><span class="pct">11%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">2</span><span class="pct">5%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">8</span><span class="pct">21%</span></div>
+            <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">2</span><span class="pct">5%</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- DEFECT THRESHOLD — BUBBLE MATRIX -->
+    <!-- Defect threshold -->
     <div class="section">
-      <div class="section-head">
-        <div class="section-title">Defects — Breached threshold</div>
-        <div class="section-action">Bubble size = count · open column highlighted</div>
-      </div>
+      <div class="section-head"><div class="section-title">Defects — Breached threshold</div><div class="section-action">Darker = more defects</div></div>
       <div class="card-block">
-        <table class="bubble-grid">
+        <table class="data heatmap">
           <thead>
-            <tr>
-              <th></th>
-              <th>Total</th><th>Open</th>
-              <th>Functional</th><th>Environment</th><th>Design</th>
-              <th>Existing</th><th>Non-repro</th><th>Invalid</th><th>Duplicate</th>
-            </tr>
+            <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th></tr>
           </thead>
           <tbody>
             <tr>
-              <td>P1</td>
-              <td><span class="bubble" style="width:28px;height:28px;font-size:11px;">4</span></td>
-              <td><span class="bubble open" style="width:24px;height:24px;font-size:11px;">2</span></td>
-              <td><span class="bubble" style="width:24px;height:24px;font-size:11px;">2</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
+              <td class="row-label">P1</td>
+              <td class="heat" data-level="2">4</td>
+              <td class="heat heat-open" data-level="2">2</td>
+              <td class="heat" data-level="2">2</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="0">0</td>
             </tr>
             <tr>
-              <td>P2</td>
-              <td><span class="bubble" style="width:32px;height:32px;font-size:12px;">6</span></td>
-              <td><span class="bubble open" style="width:28px;height:28px;font-size:11px;">3</span></td>
-              <td><span class="bubble" style="width:28px;height:28px;font-size:11px;">3</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
+              <td class="row-label">P2</td>
+              <td class="heat" data-level="3">6</td>
+              <td class="heat heat-open" data-level="3">3</td>
+              <td class="heat" data-level="2">3</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
             </tr>
             <tr>
-              <td>P3 + P4</td>
-              <td><span class="bubble" style="width:34px;height:34px;font-size:12px;">7</span></td>
-              <td><span class="bubble open" style="width:30px;height:30px;font-size:11px;">4</span></td>
-              <td><span class="bubble" style="width:28px;height:28px;font-size:11px;">3</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble" style="width:24px;height:24px;font-size:11px;">2</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
+              <td class="row-label">P3 + P4</td>
+              <td class="heat" data-level="3">7</td>
+              <td class="heat heat-open" data-level="3">4</td>
+              <td class="heat" data-level="2">3</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="1">2</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
+              <td class="heat" data-level="0">0</td>
             </tr>
             <tr class="total-row">
-              <td>Total</td>
-              <td><span class="bubble" style="width:44px;height:44px;font-size:14px;">17</span></td>
-              <td><span class="bubble high-open" style="width:38px;height:38px;font-size:13px;">9</span></td>
-              <td><span class="bubble" style="width:38px;height:38px;font-size:13px;">8</span></td>
-              <td><span class="bubble" style="width:24px;height:24px;font-size:11px;">2</span></td>
-              <td><span class="bubble" style="width:28px;height:28px;font-size:11px;">3</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble" style="width:24px;height:24px;font-size:11px;">2</span></td>
-              <td><span class="bubble" style="width:18px;height:18px;font-size:10px;">1</span></td>
-              <td><span class="bubble zero" style="width:18px;height:18px;font-size:11px;">0</span></td>
+              <td class="row-label">Total</td>
+              <td class="heat" data-level="4">17</td>
+              <td class="heat heat-open" data-level="4">9</td>
+              <td class="heat" data-level="3">8</td>
+              <td class="heat" data-level="1">2</td>
+              <td class="heat" data-level="2">3</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="1">2</td>
+              <td class="heat" data-level="1">1</td>
+              <td class="heat" data-level="0">0</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- OPEN DEFECTS — HISTOGRAM + COMPACT LIST -->
+    <!-- Open defects -->
     <div class="section">
-      <div class="section-head">
-        <div class="section-title">Open Defects</div>
-        <div class="section-action">9 open · age distribution</div>
+      <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
+      <div class="card-block">
+        <table class="data">
+          <thead>
+            <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th>Aging</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
+              <td><span class="pill danger">P1</span></td><td>Open</td>
+              <td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td>
+              <td class="mono">TC-042, TC-051</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
+              <td><span class="pill danger">P1</span></td><td>In review</td>
+              <td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td>
+              <td class="mono">TC-067</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
+              <td><span class="pill warning">P2</span></td><td>Open</td>
+              <td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td>
+              <td class="mono">—</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
+              <td><span class="pill warning">P2</span></td><td>Open</td>
+              <td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td>
+              <td class="mono">TC-089</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
+            </tr>
+            <tr>
+              <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
+              <td><span class="pill warning">P2</span></td><td>Open</td>
+              <td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td>
+              <td class="mono">—</td>
+              <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="defect-block">
+    </div>
 
-        <div class="age-hist-wrap">
-          <div class="age-hist-head">
-            <span class="label">Aging distribution</span>
-            <span class="insight"><strong>4 of 5</strong> defects are 8+ days old</span>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PATTERN B: Three tabs -->
+  <!-- ============================================================ -->
+  <div class="pattern-pane" id="pattern-b">
+
+    <div class="pattern-note"><strong>Pattern B:</strong> sections grouped into 3 tabs — Overview, Execution, Open Defects. Click a tab to focus.</div>
+
+    <!-- CR banner -->
+    <div class="cr-banner">
+      <div class="left">
+        <div class="id">CR-686</div>
+        <div class="summary">Audit log retention</div>
+        <div class="sub">Owned by Layla Iyer · 5 Jira issues attached · Towers: Cards, Wealth, Onboarding</div>
+      </div>
+      <div class="right">
+        <span class="pill warning"><span class="dot"></span>In progress</span>
+      </div>
+    </div>
+
+    <!-- AI verdict summary -->
+    <div class="verdict-card">
+      <div class="verdict-head">
+        <span class="pill warning"><span class="dot"></span>At risk</span>
+        <span class="verdict-meta">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+          AI summary · refreshed 10:42 AM
+        </span>
+      </div>
+      <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open and are blocking 3 test cases. At current velocity (~8 tests/day), the team needs approximately <strong>6 more days</strong> to clear the backlog. Recommend extending SIT by one week or descoping P1-blocked test cases for post-deployment.</p>
+    </div>
+
+    <!-- Tab strip -->
+    <div class="tabs-strip">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="execution">Execution</button>
+      <button class="tab-btn" data-tab="defects">Open Defects</button>
+    </div>
+
+    <!-- Overview tab -->
+    <div class="tab-content active" id="tab-overview">
+      <div class="section">
+        <div class="section-head"><div class="section-title">CR Details</div></div>
+        <div class="card-block">
+          <div class="kv-grid">
+            <div class="kv"><div class="k">ITPM</div><div class="v">Layla Iyer</div></div>
+            <div class="kv"><div class="k">SD Name</div><div class="v">Settlement Domain</div></div>
+            <div class="kv"><div class="k">Demand Manager</div><div class="v">Kavya Ali</div></div>
+            <div class="kv"><div class="k">Priority</div><div class="v">P1</div></div>
+            <div class="kv"><div class="k">Delivery Tower</div><div class="v">Cards (primary)</div></div>
+            <div class="kv"><div class="k">Complexity</div><div class="v">High</div></div>
+            <div class="kv"><div class="k">Cut Effort</div><div class="v">29.2 PD</div></div>
+            <div class="kv"><div class="k">Testing Effort</div><div class="v">14.6 PD</div></div>
           </div>
-          <div class="age-hist">
-            <div class="age-bucket">
-              <span class="count zero">0</span>
-              <div class="bar-wrap"><div class="bar muted" style="height: 2px;"></div></div>
-              <span class="bucket-label">0–3d</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="section-title">Schedule</div></div>
+        <div class="card-block timeline-block">
+          <div class="timeline-track">
+            <div class="timeline-fill" style="width: 67%;"></div>
+            <div class="timeline-markers">
+              <div class="timeline-marker done"></div>
+              <div class="timeline-marker done"></div>
+              <div class="timeline-marker current"></div>
+              <div class="timeline-marker future"></div>
             </div>
-            <div class="age-bucket">
-              <span class="count">1</span>
-              <div class="bar-wrap"><div class="bar" style="height: 22%;"></div></div>
-              <span class="bucket-label">4–7d</span>
+          </div>
+          <div class="timeline-labels">
+            <div class="timeline-label">
+              <div class="stage">Dev end</div>
+              <div class="planned">planned Aug 12</div>
+              <div class="actual ok">actual Aug 15</div>
             </div>
-            <div class="age-bucket">
-              <span class="count">4</span>
-              <div class="bar-wrap"><div class="bar warn" style="height: 88%;"></div></div>
-              <span class="bucket-label">8–14d</span>
+            <div class="timeline-label">
+              <div class="stage">SIT start</div>
+              <div class="planned">planned Aug 16</div>
+              <div class="actual ok">actual Aug 18</div>
             </div>
-            <div class="age-bucket">
-              <span class="count zero">0</span>
-              <div class="bar-wrap"><div class="bar muted" style="height: 2px;"></div></div>
-              <span class="bucket-label">15+d</span>
+            <div class="timeline-label">
+              <div class="stage">SIT end</div>
+              <div class="planned">planned Aug 30</div>
+              <div class="actual slip">at risk · +5d</div>
+            </div>
+            <div class="timeline-label">
+              <div class="stage">Deploy</div>
+              <div class="planned">planned Sep 15</div>
+              <div class="actual future">future</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="section-title">Test Design</div></div>
+        <div class="card-block">
+          <div class="kv-grid">
+            <div class="kv"><div class="k">Designer</div><div class="v">Daniel Das</div></div>
+            <div class="kv"><div class="k">SIT Plan Key</div><div class="v mono">TP-3402</div></div>
+            <div class="kv"><div class="k">Dynamic Plan Key</div><div class="v mono">TP-3403</div></div>
+            <div class="kv"><div class="k">Approval Status</div><div class="v"><span class="pill success"><span class="dot"></span>Approved</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Execution tab -->
+    <div class="tab-content" id="tab-execution">
+      <div class="section">
+        <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
+        <div class="card-block">
+          <div class="exec-group">
+            <div class="exec-label">
+              <span class="name">Progression</span>
+              <span class="total">142 tests · 69% pass rate</span>
+            </div>
+            <div class="stacked-bar">
+              <div class="seg pass" style="width: 69.0%;"></div>
+              <div class="seg fail" style="width: 8.5%;"></div>
+              <div class="seg block" style="width: 3.5%;"></div>
+              <div class="seg prog" style="width: 12.7%;"></div>
+              <div class="seg idle" style="width: 4.9%;"></div>
+              <div class="seg descoped" style="width: 1.4%;"></div>
+            </div>
+            <div class="bar-legend">
+              <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">98</span><span class="pct">69%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">12</span><span class="pct">8%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">5</span><span class="pct">4%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">18</span><span class="pct">13%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">7</span><span class="pct">5%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.22);"></div>Descoped <span class="val">2</span><span class="pct">1%</span></div>
+            </div>
+          </div>
+          <div class="exec-group">
+            <div class="exec-label">
+              <span class="name">Dynamic</span>
+              <span class="total">38 tests · 58% pass rate</span>
+            </div>
+            <div class="stacked-bar">
+              <div class="seg pass" style="width: 57.9%;"></div>
+              <div class="seg fail" style="width: 10.5%;"></div>
+              <div class="seg block" style="width: 5.3%;"></div>
+              <div class="seg prog" style="width: 21.0%;"></div>
+              <div class="seg idle" style="width: 5.3%;"></div>
+            </div>
+            <div class="bar-legend">
+              <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">22</span><span class="pct">58%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Failed <span class="val">4</span><span class="pct">11%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Blocked <span class="val">2</span><span class="pct">5%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>In progress <span class="val">8</span><span class="pct">21%</span></div>
+              <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Not started <span class="val">2</span><span class="pct">5%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="section-title">Defects — Breached threshold</div><div class="section-action">Darker = more defects</div></div>
+        <div class="card-block">
+          <table class="data heatmap">
+            <thead>
+              <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Functional</th><th class="num">Environment</th><th class="num">Design</th><th class="num">Existing</th><th class="num">Non-repro</th><th class="num">Invalid</th><th class="num">Duplicate</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label">P1</td>
+                <td class="heat" data-level="2">4</td>
+                <td class="heat heat-open" data-level="2">2</td>
+                <td class="heat" data-level="2">2</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
+              <tr>
+                <td class="row-label">P2</td>
+                <td class="heat" data-level="3">6</td>
+                <td class="heat heat-open" data-level="3">3</td>
+                <td class="heat" data-level="2">3</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
+              <tr>
+                <td class="row-label">P3 + P4</td>
+                <td class="heat" data-level="3">7</td>
+                <td class="heat heat-open" data-level="3">4</td>
+                <td class="heat" data-level="2">3</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="1">2</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
+              <tr class="total-row">
+                <td class="row-label">Total</td>
+                <td class="heat" data-level="4">17</td>
+                <td class="heat heat-open" data-level="4">9</td>
+                <td class="heat" data-level="3">8</td>
+                <td class="heat" data-level="1">2</td>
+                <td class="heat" data-level="2">3</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="1">2</td>
+                <td class="heat" data-level="1">1</td>
+                <td class="heat" data-level="0">0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Defects tab -->
+    <div class="tab-content" id="tab-defects">
+      <div class="section">
+        <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
+        <div class="card-block">
+          <table class="data">
+            <thead>
+              <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th>Aging</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
+                <td><span class="pill danger">P1</span></td><td>Open</td>
+                <td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td>
+                <td class="mono">TC-042, TC-051</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
+                <td><span class="pill danger">P1</span></td><td>In review</td>
+                <td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td>
+                <td class="mono">TC-067</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
+                <td><span class="pill warning">P2</span></td><td>Open</td>
+                <td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td>
+                <td class="mono">—</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
+                <td><span class="pill warning">P2</span></td><td>Open</td>
+                <td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td>
+                <td class="mono">TC-089</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
+              </tr>
+              <tr>
+                <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
+                <td><span class="pill warning">P2</span></td><td>Open</td>
+                <td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td>
+                <td class="mono">—</td>
+                <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PATTERN C: Two-pane sticky context -->
+  <!-- ============================================================ -->
+  <div class="pattern-pane" id="pattern-c">
+
+    <div class="pattern-note"><strong>Pattern C:</strong> CR identity + key facts stay sticky on the left. Detail sections scroll on the right.</div>
+
+    <div class="two-pane">
+      <aside class="sidebar">
+        <div class="id-large">CR-686</div>
+        <div class="summary-line">Audit log retention</div>
+        <span class="pill warning"><span class="dot"></span>In progress</span>
+
+        <div class="sb-list">
+          <div class="row"><span class="k">ITPM</span><span class="v">Layla Iyer</span></div>
+          <div class="row"><span class="k">Test Designer</span><span class="v">Daniel Das</span></div>
+          <div class="row"><span class="k">Test Lead</span><span class="v">Hiroshi Park</span></div>
+          <div class="row"><span class="k">Priority</span><span class="v">P1</span></div>
+          <div class="row"><span class="k">Complexity</span><span class="v">High</span></div>
+          <div class="row"><span class="k">Cut effort</span><span class="v">29.2 PD</span></div>
+        </div>
+
+        <div class="sb-list">
+          <div class="row"><span class="k">SIT planned</span><span class="v mono">Aug 30</span></div>
+          <div class="row"><span class="k">SIT actual</span><span class="v mono" style="color: hsl(var(--warning));">Sep 04</span></div>
+          <div class="row"><span class="k">Deploy planned</span><span class="v mono">Sep 15</span></div>
+        </div>
+      </aside>
+
+      <div class="content">
+
+        <div class="verdict-card">
+          <div class="verdict-head">
+            <span class="pill warning"><span class="dot"></span>At risk</span>
+            <span class="verdict-meta">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+              AI summary · 10:42 AM
+            </span>
+          </div>
+          <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open, blocking 3 test cases. At current velocity (~8 tests/day), the team needs <strong>6 more days</strong> to clear the backlog. Recommend extending SIT or descoping blocked tests.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Schedule</div></div>
+          <div class="card-block timeline-block">
+            <div class="timeline-track">
+              <div class="timeline-fill" style="width: 67%;"></div>
+              <div class="timeline-markers">
+                <div class="timeline-marker done"></div>
+                <div class="timeline-marker done"></div>
+                <div class="timeline-marker current"></div>
+                <div class="timeline-marker future"></div>
+              </div>
+            </div>
+            <div class="timeline-labels">
+              <div class="timeline-label">
+                <div class="stage">Dev end</div>
+                <div class="planned">Aug 12</div>
+                <div class="actual ok">Aug 15</div>
+              </div>
+              <div class="timeline-label">
+                <div class="stage">SIT start</div>
+                <div class="planned">Aug 16</div>
+                <div class="actual ok">Aug 18</div>
+              </div>
+              <div class="timeline-label">
+                <div class="stage">SIT end</div>
+                <div class="planned">Aug 30</div>
+                <div class="actual slip">+5d</div>
+              </div>
+              <div class="timeline-label">
+                <div class="stage">Deploy</div>
+                <div class="planned">Sep 15</div>
+                <div class="actual future">future</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="defect-list">
-          <div class="defect-row">
-            <span class="pri-pill p1">P1</span>
-            <div>
-              <div class="defect-title"><span class="id">PDI-1118</span>Notification engine — push retries failing</div>
-              <div class="defect-meta">Open · Tester: Neha Khan · Blocking <span class="blocked">TC-042, TC-051</span></div>
+        <div class="section">
+          <div class="section-head"><div class="section-title">Test Design</div></div>
+          <div class="card-block">
+            <div class="kv-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="kv"><div class="k">SIT Plan Key</div><div class="v mono">TP-3402</div></div>
+              <div class="kv" style="border-right: none;"><div class="k">Dynamic Plan Key</div><div class="v mono">TP-3403</div></div>
+              <div class="kv" style="border-top: 1px solid hsl(var(--border));"><div class="k">Designer</div><div class="v">Daniel Das</div></div>
+              <div class="kv" style="border-right: none; border-top: 1px solid hsl(var(--border));"><div class="k">Approval Status</div><div class="v"><span class="pill success"><span class="dot"></span>Approved</span></div></div>
             </div>
-            <div class="assignee"><div class="name">Hiroshi Park</div><div>assignee</div></div>
-            <div class="age danger">14d</div>
           </div>
-          <div class="defect-row">
-            <span class="pri-pill p1">P1</span>
-            <div>
-              <div class="defect-title"><span class="id">PDI-1120</span>Fraud rule update — incorrect threshold</div>
-              <div class="defect-meta">In review · Tester: Neha Khan · Blocking <span class="blocked">TC-067</span></div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Test Execution — SIT</div></div>
+          <div class="card-block">
+            <div class="exec-group">
+              <div class="exec-label">
+                <span class="name">Progression</span>
+                <span class="total">142 · 69% pass</span>
+              </div>
+              <div class="stacked-bar">
+                <div class="seg pass" style="width: 69.0%;"></div>
+                <div class="seg fail" style="width: 8.5%;"></div>
+                <div class="seg block" style="width: 3.5%;"></div>
+                <div class="seg prog" style="width: 12.7%;"></div>
+                <div class="seg idle" style="width: 4.9%;"></div>
+                <div class="seg descoped" style="width: 1.4%;"></div>
+              </div>
+              <div class="bar-legend">
+                <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">98</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Fail <span class="val">12</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Block <span class="val">5</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>Prog <span class="val">18</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Idle <span class="val">7</span></div>
+              </div>
             </div>
-            <div class="assignee"><div class="name">Daniel Das</div><div>assignee</div></div>
-            <div class="age danger">11d</div>
+            <div class="exec-group">
+              <div class="exec-label">
+                <span class="name">Dynamic</span>
+                <span class="total">38 · 58% pass</span>
+              </div>
+              <div class="stacked-bar">
+                <div class="seg pass" style="width: 57.9%;"></div>
+                <div class="seg fail" style="width: 10.5%;"></div>
+                <div class="seg block" style="width: 5.3%;"></div>
+                <div class="seg prog" style="width: 21.0%;"></div>
+                <div class="seg idle" style="width: 5.3%;"></div>
+              </div>
+              <div class="bar-legend">
+                <div class="item"><div class="dot" style="background: hsl(var(--success));"></div>Pass <span class="val">22</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--danger));"></div>Fail <span class="val">4</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--warning));"></div>Block <span class="val">2</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--brand));"></div>Prog <span class="val">8</span></div>
+                <div class="item"><div class="dot" style="background: hsl(var(--muted-foreground) / 0.45);"></div>Idle <span class="val">2</span></div>
+              </div>
+            </div>
           </div>
-          <div class="defect-row">
-            <span class="pri-pill p2">P2</span>
-            <div>
-              <div class="defect-title"><span class="id">PDI-1117</span>Statement export — PDF formatting bug</div>
-              <div class="defect-meta">Open · Tester: Neha Khan · No TCs blocked</div>
-            </div>
-            <div class="assignee"><div class="name">Layla Iyer</div><div>assignee</div></div>
-            <div class="age warn">10d</div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Defects — Breached threshold</div></div>
+          <div class="card-block" style="overflow-x: auto;">
+            <table class="data heatmap">
+              <thead>
+                <tr><th></th><th class="num">Total</th><th class="num">Open</th><th class="num">Func.</th><th class="num">Env.</th><th class="num">Design</th><th class="num">Existing</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="row-label">P1</td>
+                  <td class="heat" data-level="2">4</td>
+                  <td class="heat heat-open" data-level="2">2</td>
+                  <td class="heat" data-level="2">2</td>
+                  <td class="heat" data-level="1">1</td>
+                  <td class="heat" data-level="0">0</td>
+                  <td class="heat" data-level="0">0</td>
+                </tr>
+                <tr>
+                  <td class="row-label">P2</td>
+                  <td class="heat" data-level="3">6</td>
+                  <td class="heat heat-open" data-level="3">3</td>
+                  <td class="heat" data-level="2">3</td>
+                  <td class="heat" data-level="0">0</td>
+                  <td class="heat" data-level="1">1</td>
+                  <td class="heat" data-level="1">1</td>
+                </tr>
+                <tr>
+                  <td class="row-label">P3 + P4</td>
+                  <td class="heat" data-level="3">7</td>
+                  <td class="heat heat-open" data-level="3">4</td>
+                  <td class="heat" data-level="2">3</td>
+                  <td class="heat" data-level="1">1</td>
+                  <td class="heat" data-level="1">2</td>
+                  <td class="heat" data-level="0">0</td>
+                </tr>
+                <tr class="total-row">
+                  <td class="row-label">Total</td>
+                  <td class="heat" data-level="4">17</td>
+                  <td class="heat heat-open" data-level="4">9</td>
+                  <td class="heat" data-level="3">8</td>
+                  <td class="heat" data-level="1">2</td>
+                  <td class="heat" data-level="2">3</td>
+                  <td class="heat" data-level="1">1</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="defect-row">
-            <span class="pri-pill p2">P2</span>
-            <div>
-              <div class="defect-title"><span class="id">PDI-1119</span>Audit log — retention not enforced after 90d</div>
-              <div class="defect-meta">Open · Tester: Kavya Ali · Blocking <span class="blocked">TC-089</span></div>
-            </div>
-            <div class="assignee"><div class="name">Daniel Das</div><div>assignee</div></div>
-            <div class="age warn">8d</div>
-          </div>
-          <div class="defect-row">
-            <span class="pri-pill p2">P2</span>
-            <div>
-              <div class="defect-title"><span class="id">PDI-1121</span>Rewards accrual — points miscalc on promo cards</div>
-              <div class="defect-meta">Open · Tester: Neha Khan · No TCs blocked</div>
-            </div>
-            <div class="assignee"><div class="name">Hiroshi Park</div><div>assignee</div></div>
-            <div class="age">5d</div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
+          <div class="card-block" style="overflow-x: auto;">
+            <table class="data">
+              <thead>
+                <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Assignee</th><th>Aging</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
+                  <td><span class="pill danger">P1</span></td><td>Open</td><td>Hiroshi Park</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
+                  <td><span class="pill danger">P1</span></td><td>In review</td><td>Daniel Das</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
+                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Layla Iyer</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
+                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Daniel Das</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
+                </tr>
+                <tr>
+                  <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
+                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Hiroshi Park</td>
+                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -949,7 +1538,7 @@
     root.classList.toggle('dark', next === 'dark');
   });
 
-  // Combobox
+  // Searchable combobox (CR ID)
   (function() {
     const combobox = document.getElementById('crCombobox');
     if (!combobox) return;
@@ -957,21 +1546,32 @@
     const popover = combobox.querySelector('.combobox-popover');
     const search = combobox.querySelector('.combobox-search');
     const list = combobox.querySelector('.combobox-list');
+    const empty = combobox.querySelector('.combobox-empty');
     const valueEl = combobox.querySelector('.combobox-value');
 
-    function filter(q) {
+    function filterOptions(q) {
       const lower = q.toLowerCase();
+      let visible = 0;
       list.querySelectorAll('.combobox-option').forEach(opt => {
-        opt.hidden = !opt.textContent.toLowerCase().includes(lower);
+        const match = opt.textContent.toLowerCase().includes(lower);
+        opt.hidden = !match;
+        if (match) visible++;
       });
+      empty.hidden = visible > 0;
     }
     function open() {
-      popover.hidden = false; search.value = ''; filter('');
+      popover.hidden = false;
+      search.value = '';
+      filterOptions('');
       setTimeout(() => search.focus(), 0);
     }
     function close() { popover.hidden = true; }
-    trigger.addEventListener('click', e => { e.stopPropagation(); popover.hidden ? open() : close(); });
-    search.addEventListener('input', e => filter(e.target.value));
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (popover.hidden) open(); else close();
+    });
+    search.addEventListener('input', e => filterOptions(e.target.value));
     search.addEventListener('click', e => e.stopPropagation());
     list.addEventListener('click', e => {
       const opt = e.target.closest('.combobox-option');
@@ -981,27 +1581,35 @@
       opt.classList.add('selected');
       close();
     });
-    document.addEventListener('click', e => { if (!combobox.contains(e.target)) close(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    document.addEventListener('click', e => {
+      if (!combobox.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close();
+    });
   })();
 
-  // Waffle chart generator
-  const STATUS_LABELS = {
-    pass: 'Pass', fail: 'Failed', block: 'Blocked',
-    prog: 'In progress', idle: 'Not started', descoped: 'Descoped'
-  };
-  document.querySelectorAll('.waffle').forEach(el => {
-    let data;
-    try { data = JSON.parse(el.dataset.waffle); } catch (e) { return; }
-    const order = ['pass', 'fail', 'block', 'prog', 'idle', 'descoped'];
-    let html = '';
-    order.forEach(key => {
-      const count = data[key] || 0;
-      for (let i = 0; i < count; i++) {
-        html += `<div class="cell ${key}" title="${STATUS_LABELS[key]}"></div>`;
-      }
+  // Pattern switcher
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const p = btn.dataset.pattern;
+      document.querySelectorAll('.pattern-pane').forEach(pane => pane.classList.remove('active'));
+      document.getElementById('pattern-' + p).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    el.innerHTML = html;
+  });
+
+  // Tab switcher (Pattern B)
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const t = btn.dataset.tab;
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + t).classList.add('active');
+    });
   });
 </script>
 
