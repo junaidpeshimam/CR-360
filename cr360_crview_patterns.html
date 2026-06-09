@@ -267,7 +267,9 @@
   }
   .cr-banner .left .sub {
     font-size: 12px; color: hsl(var(--muted-foreground));
-    margin-top: 8px;
+    margin-top: 10px;
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap;
   }
   .cr-banner .right { display: flex; gap: 6px; }
 
@@ -495,35 +497,158 @@
     font-weight: 600;
   }
 
+  /* CR banner — owner avatar + tower chips */
+  .owner-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px;
+    color: hsl(var(--foreground));
+  }
+  .owner-avatar {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: hsl(var(--brand) / 0.14);
+    color: hsl(var(--brand));
+    font-size: 9.5px;
+    font-weight: 700;
+    font-family: 'Geist Mono', monospace;
+    display: inline-flex; align-items: center; justify-content: center;
+    letter-spacing: 0;
+  }
+  .meta-dot { color: hsl(var(--muted-foreground)); opacity: 0.45; margin: 0 2px; }
+  .meta-dim { color: hsl(var(--muted-foreground)); font-size: 12px; }
+  .meta-label { color: hsl(var(--muted-foreground)); font-size: 12px; margin-right: 2px; }
+  .chip-soft {
+    display: inline-flex; align-items: center;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .tower-chip {
+    display: inline-flex; align-items: center;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Verdict — inline number highlights */
+  .v-hi {
+    display: inline-flex; align-items: baseline;
+    padding: 1px 6px;
+    margin: 0 1px;
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  .v-hi.brand  { color: hsl(var(--brand));   background: hsl(var(--brand) / 0.10); }
+  .v-hi.warn   { color: hsl(var(--warning)); background: hsl(var(--warning) / 0.13); }
+  .v-hi.danger { color: hsl(var(--danger));  background: hsl(var(--danger) / 0.10); }
+  .v-hi.info   { color: hsl(var(--muted-foreground)); background: hsl(var(--muted)); }
+
+  /* Verdict — recommend pull-quote */
+  .verdict-recommend {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed hsl(var(--border));
+  }
+  .verdict-recommend .rec-label {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--brand));
+    padding: 5px 9px;
+    border-radius: 4px;
+    background: hsl(var(--brand) / 0.10);
+    flex-shrink: 0;
+    margin-top: 1px;
+    line-height: 1;
+  }
+  .verdict-recommend .rec-label svg { color: hsl(var(--brand)); }
+  .verdict-recommend .rec-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: hsl(var(--foreground));
+    margin: 0;
+    flex: 1;
+  }
+
+  /* Verdict — data sources footer */
+  .verdict-sources {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid hsl(var(--border));
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap;
+  }
+  .verdict-sources .src-label {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-style: italic;
+    margin-right: 2px;
+  }
+  .verdict-sources .src-label svg {
+    color: hsl(var(--brand));
+    opacity: 0.85;
+  }
+  .verdict-sources .src-chip {
+    display: inline-flex; align-items: center;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    font-size: 11px;
+    font-weight: 500;
+    font-style: normal;
+  }
+
   /* Schedule timeline */
   .timeline-block { padding: 32px 28px 24px; }
   .timeline-track {
     position: relative;
-    height: 3px;
-    background: hsl(var(--border));
-    border-radius: 2px;
-    margin: 16px 6% 36px;
+    height: 12px;
+    background: hsl(var(--muted));
+    border-radius: 999px;
+    margin: 16px 6% 40px;
   }
   .timeline-fill {
     position: absolute; top: 0; left: 0;
     height: 100%;
     background: hsl(var(--brand));
-    border-radius: 2px;
+    border-radius: 999px;
   }
   .timeline-markers {
     position: absolute;
-    top: -7px; left: 0; right: 0;
+    top: -4px; left: 0; right: 0;
     display: flex; justify-content: space-between;
   }
   .timeline-marker {
-    width: 16px; height: 16px;
+    width: 20px; height: 20px;
     border-radius: 50%;
     background: hsl(var(--background));
-    border: 2px solid hsl(var(--border));
+    border: 3px solid hsl(var(--border));
   }
   .timeline-marker.done {
     background: hsl(var(--success));
     border-color: hsl(var(--success));
+  }
+  .timeline-marker.slipped {
+    background: hsl(var(--danger));
+    border-color: hsl(var(--danger));
   }
   .timeline-marker.current {
     background: hsl(var(--warning));
@@ -560,7 +685,271 @@
   }
   .timeline-label .actual.ok { color: hsl(var(--success)); }
   .timeline-label .actual.slip { color: hsl(var(--warning)); }
+  .timeline-label .actual.danger { color: hsl(var(--danger)); }
   .timeline-label .actual.future { color: hsl(var(--muted-foreground)); }
+
+  /* Age histogram for defect age distribution */
+  .age-hist-wrap {
+    padding: 20px 24px;
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
+  }
+  .age-hist-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 16px;
+  }
+  .age-hist-head .label {
+    font-size: 12px; color: hsl(var(--muted-foreground));
+    font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .age-hist-head .insight {
+    font-size: 12px; color: hsl(var(--muted-foreground));
+  }
+  .age-hist-head .insight strong { color: hsl(var(--warning)); font-weight: 600; }
+  .age-hist {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 18px; align-items: end;
+    height: 92px;
+  }
+  .age-bucket {
+    display: flex; flex-direction: column;
+    align-items: center;
+    height: 100%;
+    gap: 6px;
+  }
+  .age-bucket .count {
+    font-size: 13px; font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: hsl(var(--foreground));
+  }
+  .age-bucket .count.zero { color: hsl(var(--muted-foreground)); opacity: 0.5; }
+  .age-bucket .bar-wrap {
+    flex: 1; width: 100%;
+    display: flex; align-items: flex-end;
+    padding: 0 12%;
+  }
+  .age-bucket .bar {
+    width: 100%;
+    background: hsl(var(--brand));
+    border-radius: 3px 3px 0 0;
+    min-height: 2px;
+  }
+  .age-bucket .bar.warn { background: hsl(var(--warning)); }
+  .age-bucket .bar.muted { background: hsl(var(--muted-foreground) / 0.25); }
+
+  /* Stacked bars segmented by priority */
+  .bar-stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    min-height: 2px;
+  }
+  .bar-stack.empty {
+    background: hsl(var(--muted-foreground) / 0.25);
+    border-radius: 3px 3px 0 0;
+  }
+  .bar-stack .seg {
+    width: 100%;
+    position: relative;
+    transition: filter 120ms;
+  }
+  .bar-stack .seg:last-child { border-radius: 3px 3px 0 0; }
+  .bar-stack .seg:hover {
+    filter: brightness(1.2);
+    z-index: 5;
+  }
+  .bar-stack .seg[data-priority]::after {
+    content: attr(data-priority) ' · ' attr(data-count);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 9px;
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 100ms;
+    z-index: 10;
+    box-shadow: 0 4px 12px hsl(var(--foreground) / 0.15);
+  }
+  .bar-stack .seg[data-priority]:hover::after { opacity: 1; }
+  .bar-stack .seg.p1 { background: hsl(var(--danger)); }
+  .bar-stack .seg.p2 { background: hsl(var(--warning)); }
+  .bar-stack .seg.p34 { background: hsl(var(--muted-foreground) / 0.55); }
+
+  /* Histogram priority legend */
+  .age-hist-legend {
+    display: flex;
+    gap: 18px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid hsl(var(--border));
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
+  }
+  .age-hist-legend .leg-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .age-hist-legend .leg-dot {
+    width: 9px; height: 9px;
+    border-radius: 2px;
+  }
+  .age-bucket .bucket-label {
+    font-size: 11px; color: hsl(var(--muted-foreground));
+    text-transform: uppercase; letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  /* Defect cards (2-line layout) */
+  .defect-block {
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: hsl(var(--card));
+  }
+  .defect-cards {
+    display: flex; flex-direction: column;
+    gap: 1px;
+    background: hsl(var(--border));
+  }
+  .d-card {
+    background: hsl(var(--card));
+    padding: 14px 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+  }
+  .d-card:hover { background: hsl(var(--muted) / 0.3); }
+  .d-pri {
+    font-size: 11px; font-weight: 600;
+    padding: 4px 8px; border-radius: 4px;
+    font-family: 'Geist Mono', monospace;
+    text-align: center;
+    min-width: 30px;
+    line-height: 1;
+  }
+  .d-pri.p1 { background: hsl(var(--danger-bg)); color: hsl(var(--danger)); }
+  .d-pri.p2 { background: hsl(var(--warning-bg)); color: hsl(var(--warning)); }
+  .d-body {
+    display: flex; flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+  .d-line {
+    display: flex; justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .d-line .left, .d-line .right {
+    display: flex; gap: 10px;
+    align-items: baseline;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+  .d-line .right { flex-shrink: 0; gap: 14px; }
+  .d-line-1 { font-size: 13px; }
+  .d-line-2 {
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+  }
+  .d-id {
+    font-family: 'Geist Mono', monospace;
+    color: hsl(var(--brand));
+    font-weight: 500;
+  }
+  .d-summary {
+    font-weight: 500;
+    color: hsl(var(--foreground));
+  }
+  /* Application chip — visually distinct from inline text */
+  .d-app {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .d-app::before { content: ''; display: none; margin: 0; }
+  /* Status pill — mirrors the Approved badge styling with a dot */
+  .d-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    background: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .d-status::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+  /* Status color variants */
+  .d-status.open {
+    background: hsl(var(--warning) / 0.15);
+    color: hsl(var(--warning));
+  }
+  .d-status.review {
+    background: hsl(var(--brand) / 0.12);
+    color: hsl(var(--brand));
+  }
+  /* Assignee — stacked with small label below */
+  .d-assignee {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.2;
+    text-align: right;
+  }
+  .d-assignee::after {
+    content: 'assignee';
+    font-size: 10px;
+    color: hsl(var(--muted-foreground));
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  .d-age {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    min-width: 36px;
+    text-align: right;
+  }
+  .d-age.warn { color: hsl(var(--warning)); }
+  .d-age.danger { color: hsl(var(--danger)); }
+  .d-meta-item .lbl {
+    color: hsl(var(--muted-foreground));
+    margin-right: 4px;
+  }
+  .d-meta-item .val {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+  }
 
   /* End visual data components */
 
@@ -667,9 +1056,253 @@
     margin-bottom: 24px;
   }
   .pattern-note strong { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* ============== MICRO-INTERACTIONS & ACCESSIBILITY ============== */
+
+  /* Animation tokens (duration + easing) */
+  :root {
+    --dur-instant: 100ms;
+    --dur-fast: 150ms;
+    --dur-base: 220ms;
+    --dur-slow: 400ms;
+    --dur-slower: 700ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-shadcn: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Reduced motion: collapse durations near-instant but keep color/opacity */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Focus accessibility — visible 2px brand ring for keyboard nav */
+  *:focus { outline: none; }
+  *:focus-visible {
+    outline: 2px solid hsl(var(--brand));
+    outline-offset: 2px;
+    border-radius: 6px;
+    transition: outline-offset var(--dur-fast) var(--ease-shadcn);
+  }
+  .combobox-option:focus-visible {
+    outline: none;
+    background: hsl(var(--muted));
+  }
+
+  /* Skip-to-content link (visible on focus only) */
+  .skip-link {
+    position: fixed;
+    top: -50px;
+    left: 12px;
+    z-index: 200;
+    padding: 10px 16px;
+    background: hsl(var(--brand));
+    color: hsl(var(--brand-foreground));
+    font-weight: 500;
+    font-size: 13px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: top var(--dur-base) var(--ease-shadcn);
+  }
+  .skip-link:focus { top: 12px; }
+
+  /* Global theme transition */
+  html, body {
+    transition: background-color var(--dur-base) var(--ease-shadcn);
+  }
+
+  /* Universal button: hover, press, focus */
+  .btn {
+    transition: background var(--dur-fast) var(--ease-shadcn),
+                border-color var(--dur-fast) var(--ease-shadcn),
+                transform var(--dur-fast) var(--ease-shadcn);
+  }
+  .btn:active:not(:disabled) { transform: scale(0.97); }
+
+  /* Refresh icon spin animation */
+  .btn-primary svg { transition: transform var(--dur-base) var(--ease-shadcn); }
+  .btn-primary.spinning svg {
+    animation: spin var(--dur-slower) var(--ease-shadcn);
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Theme toggle icon rotate on hover */
+  .icon-sun, .icon-moon {
+    transition: transform var(--dur-base) var(--ease-shadcn);
+  }
+  .btn-icon:hover .icon-sun,
+  .btn-icon:hover .icon-moon {
+    transform: rotate(15deg);
+  }
+
+  /* Combobox popover entrance */
+  .combobox-popover:not([hidden]) {
+    animation: popoverIn var(--dur-base) var(--ease-out);
+    transform-origin: top center;
+  }
+  @keyframes popoverIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .combobox-option {
+    transition: background var(--dur-fast) var(--ease-shadcn);
+  }
+
+  /* Mode buttons */
+  .mode-btn {
+    transition: background var(--dur-fast) var(--ease-shadcn),
+                color var(--dur-fast) var(--ease-shadcn),
+                border-color var(--dur-fast) var(--ease-shadcn),
+                transform var(--dur-fast) var(--ease-shadcn);
+  }
+  .mode-btn:active { transform: scale(0.97); }
+  .tab-btn {
+    transition: color var(--dur-fast) var(--ease-shadcn),
+                border-bottom-color var(--dur-base) var(--ease-shadcn);
+  }
+
+  /* Pattern pane cross-fade on activation */
+  .pattern-pane.active {
+    animation: paneFadeIn var(--dur-slow) var(--ease-out);
+  }
+  @keyframes paneFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Tab content fade */
+  .tab-content.active {
+    animation: tabFadeIn var(--dur-base) var(--ease-out);
+  }
+  @keyframes tabFadeIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CR banner subtle entrance */
+  .cr-banner {
+    animation: bannerIn var(--dur-base) var(--ease-out) both;
+  }
+  @keyframes bannerIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Verdict card entrance */
+  .verdict-card {
+    animation: verdictIn var(--dur-slow) var(--ease-out) both;
+    animation-delay: 80ms;
+  }
+  @keyframes verdictIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Status pill dot continuous pulse (only on warning in verdict) */
+  .verdict-card .pill.warning .dot {
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+  }
+
+  /* Sparkle icon subtle wobble */
+  .verdict-meta svg {
+    animation: sparkleWobble 3s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes sparkleWobble {
+    0%, 100% { opacity: 0.85; transform: rotate(0deg) scale(1); }
+    50% { opacity: 1; transform: rotate(12deg) scale(1.08); }
+  }
+
+  /* Timeline bar fill: grows from 0 to natural width */
+  .timeline-fill {
+    animation: timelineFill 1s var(--ease-out) both;
+    animation-delay: 200ms;
+  }
+  @keyframes timelineFill { from { width: 0; } }
+
+  /* Timeline markers stagger entrance */
+  .timeline-marker {
+    animation: markerIn var(--dur-slow) var(--ease-out) both;
+  }
+  .timeline-markers .timeline-marker:nth-child(1) { animation-delay: 250ms; }
+  .timeline-markers .timeline-marker:nth-child(2) { animation-delay: 450ms; }
+  .timeline-markers .timeline-marker:nth-child(3) { animation-delay: 650ms; }
+  .timeline-markers .timeline-marker:nth-child(4) { animation-delay: 850ms; }
+  @keyframes markerIn {
+    from { opacity: 0; transform: scale(0.4); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Current marker continuous outer-glow pulse */
+  .timeline-marker.current {
+    animation: markerIn var(--dur-slow) var(--ease-out) 650ms both,
+               currentPulse 2.4s ease-in-out 1.5s infinite;
+  }
+  @keyframes currentPulse {
+    0%, 100% { box-shadow: 0 0 0 4px hsl(var(--warning) / 0.18); }
+    50% { box-shadow: 0 0 0 10px hsl(var(--warning) / 0.06); }
+  }
+
+  /* Stacked execution bar segments: scaleX in stagger */
+  .stacked-bar .seg {
+    animation: segGrowX var(--dur-slower) var(--ease-out) both;
+    transform-origin: left;
+  }
+  .stacked-bar .seg:nth-child(1) { animation-delay: 200ms; }
+  .stacked-bar .seg:nth-child(2) { animation-delay: 280ms; }
+  .stacked-bar .seg:nth-child(3) { animation-delay: 360ms; }
+  .stacked-bar .seg:nth-child(4) { animation-delay: 440ms; }
+  .stacked-bar .seg:nth-child(5) { animation-delay: 520ms; }
+  .stacked-bar .seg:nth-child(6) { animation-delay: 600ms; }
+  @keyframes segGrowX {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  /* Heatmap row hover — subtle brightness highlight across the row */
+  table.heatmap tbody tr td {
+    transition: filter var(--dur-fast) var(--ease-shadcn);
+  }
+  table.heatmap tbody tr:hover td:not(:first-child) {
+    filter: brightness(1.12);
+  }
+
+  /* Histogram bar-stacks rise from bottom, stagger per bucket */
+  .bar-stack {
+    animation: barRiseY 800ms var(--ease-out) both;
+    transform-origin: bottom;
+  }
+  .age-hist .age-bucket:nth-child(1) .bar-stack { animation-delay: 300ms; }
+  .age-hist .age-bucket:nth-child(2) .bar-stack { animation-delay: 420ms; }
+  .age-hist .age-bucket:nth-child(3) .bar-stack { animation-delay: 540ms; }
+  .age-hist .age-bucket:nth-child(4) .bar-stack { animation-delay: 660ms; }
+  @keyframes barRiseY {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+
+  /* Defect cards smooth hover */
+  .d-card {
+    transition: background var(--dur-fast) var(--ease-shadcn);
+  }
+
+  /* End micro-interactions */
 </style>
 </head>
 <body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav">
   <div class="container inner">
@@ -693,7 +1326,7 @@
   </div>
 </nav>
 
-<main class="container">
+<main class="container" id="main-content">
 
   <!-- Selectors -->
   <div class="selectors">
@@ -769,7 +1402,19 @@
       <div class="left">
         <div class="id">CR-686</div>
         <div class="summary">Audit log retention</div>
-        <div class="sub">Owned by Layla Iyer · 5 Jira issues attached · Towers: Cards, Wealth, Onboarding</div>
+        <div class="sub">
+          <span class="owner-chip">
+            <span class="owner-avatar">LI</span>
+            <span>Layla Iyer</span>
+          </span>
+          <span class="meta-dot">·</span>
+          <span class="meta-dim">5 Jira issues attached</span>
+          <span class="meta-dot">·</span>
+          <span class="meta-label">Towers:</span>
+          <span class="tower-chip">Cards</span>
+          <span class="tower-chip">Wealth</span>
+          <span class="tower-chip">Onboarding</span>
+        </div>
       </div>
       <div class="right">
         <span class="pill warning"><span class="dot"></span>In progress</span>
@@ -785,7 +1430,24 @@
           AI summary · refreshed 10:42 AM
         </span>
       </div>
-      <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open and are blocking 3 test cases. At current velocity (~8 tests/day), the team needs approximately <strong>6 more days</strong> to clear the backlog. Recommend extending SIT by one week or descoping P1-blocked test cases for post-deployment.</p>
+      <p class="verdict-text">SIT execution is at <span class="v-hi brand">67%</span> with the planned end date in <span class="v-hi warn">3 days</span>. Two <span class="v-hi danger">P1 defects</span> on DSP and BSCS remain open and are blocking <span class="v-hi warn">3 test cases</span>. At current velocity (<span class="v-hi info">~8 tests/day</span>), the team needs approximately <span class="v-hi warn">6 more days</span> to clear the backlog.</p>
+      <div class="verdict-recommend">
+        <span class="rec-label">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Recommend
+        </span>
+        <p class="rec-text">Extend SIT by <span class="v-hi brand">one week</span>, or descope <span class="v-hi danger">P1-blocked test cases</span> for post-deployment.</p>
+      </div>
+      <div class="verdict-sources">
+        <span class="src-label">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>
+          Synthesized from
+        </span>
+        <span class="src-chip">Test execution</span>
+        <span class="src-chip">Open defects</span>
+        <span class="src-chip">Schedule</span>
+        <span class="src-chip">7-day velocity</span>
+      </div>
     </div>
 
     <!-- CR Details -->
@@ -814,8 +1476,8 @@
         <div class="timeline-track">
           <div class="timeline-fill" style="width: 67%;"></div>
           <div class="timeline-markers">
-            <div class="timeline-marker done"></div>
-            <div class="timeline-marker done"></div>
+            <div class="timeline-marker slipped"></div>
+            <div class="timeline-marker slipped"></div>
             <div class="timeline-marker current"></div>
             <div class="timeline-marker future"></div>
           </div>
@@ -824,12 +1486,12 @@
           <div class="timeline-label">
             <div class="stage">Dev end</div>
             <div class="planned">planned Aug 12</div>
-            <div class="actual ok">actual Aug 15</div>
+            <div class="actual danger">actual Aug 15 · +3d</div>
           </div>
           <div class="timeline-label">
             <div class="stage">SIT start</div>
             <div class="planned">planned Aug 16</div>
-            <div class="actual ok">actual Aug 18</div>
+            <div class="actual danger">actual Aug 18 · +2d</div>
           </div>
           <div class="timeline-label">
             <div class="stage">SIT end</div>
@@ -971,50 +1633,176 @@
 
     <!-- Open defects -->
     <div class="section">
-      <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
-      <div class="card-block">
-        <table class="data">
-          <thead>
-            <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th>Aging</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
-              <td><span class="pill danger">P1</span></td><td>Open</td>
-              <td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td>
-              <td class="mono">TC-042, TC-051</td>
-              <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
-            </tr>
-            <tr>
-              <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
-              <td><span class="pill danger">P1</span></td><td>In review</td>
-              <td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td>
-              <td class="mono">TC-067</td>
-              <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
-            </tr>
-            <tr>
-              <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
-              <td><span class="pill warning">P2</span></td><td>Open</td>
-              <td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td>
-              <td class="mono">—</td>
-              <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
-            </tr>
-            <tr>
-              <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
-              <td><span class="pill warning">P2</span></td><td>Open</td>
-              <td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td>
-              <td class="mono">TC-089</td>
-              <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
-            </tr>
-            <tr>
-              <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
-              <td><span class="pill warning">P2</span></td><td>Open</td>
-              <td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td>
-              <td class="mono">—</td>
-              <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">5 open · age distribution</div></div>
+      <div class="defect-block">
+
+        <div class="age-hist-wrap">
+          <div class="age-hist-head">
+            <span class="label">Aging distribution</span>
+            <span class="insight"><strong>4 of 5</strong> defects are 8+ days old</span>
+          </div>
+          <div class="age-hist">
+            <div class="age-bucket">
+              <span class="count zero">0</span>
+              <div class="bar-wrap"><div class="bar-stack empty" style="height: 2px;"></div></div>
+              <span class="bucket-label">0–3d</span>
+            </div>
+            <div class="age-bucket">
+              <span class="count">1</span>
+              <div class="bar-wrap"><div class="bar-stack" style="height: 22%;"><div class="seg p2" data-priority="P2" data-count="1 defect" style="flex: 1;"></div></div></div>
+              <span class="bucket-label">4–7d</span>
+            </div>
+            <div class="age-bucket">
+              <span class="count">4</span>
+              <div class="bar-wrap"><div class="bar-stack" style="height: 88%;"><div class="seg p1" data-priority="P1" data-count="2 defects" style="flex: 2;"></div><div class="seg p2" data-priority="P2" data-count="2 defects" style="flex: 2;"></div></div></div>
+              <span class="bucket-label">8–14d</span>
+            </div>
+            <div class="age-bucket">
+              <span class="count zero">0</span>
+              <div class="bar-wrap"><div class="bar-stack empty" style="height: 2px;"></div></div>
+              <span class="bucket-label">15+d</span>
+            </div>
+          </div>
+        <div class="age-hist-legend"><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--danger));"></span>P1</span><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--warning));"></span>P2</span><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--muted-foreground) / 0.55);"></span>P3+P4</span></div>
+        </div>
+
+        <div class="defect-cards">
+          <div class="d-card">
+            <span class="d-pri p1">P1</span>
+            <div class="d-body">
+              <div class="d-line d-line-1">
+                <div class="left">
+                  <span class="d-id">PDI-1118</span>
+                  <span class="d-summary">Push retries failing on threshold breach</span>
+                  <span class="d-app">DSP</span>
+                </div>
+                <div class="right">
+                  <span class="d-status open">Open</span>
+                  <span class="d-assignee">Hiroshi Park</span>
+                </div>
+              </div>
+              <div class="d-line d-line-2">
+                <div class="left">
+                  <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                  <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">2</span></span>
+                </div>
+                <div class="right">
+                  <span>Created 22 Aug 2025</span>
+                </div>
+              </div>
+            </div>
+          <span class="d-age danger">14d</span>
+          </div>
+
+          <div class="d-card">
+            <span class="d-pri p1">P1</span>
+            <div class="d-body">
+              <div class="d-line d-line-1">
+                <div class="left">
+                  <span class="d-id">PDI-1120</span>
+                  <span class="d-summary">Incorrect threshold evaluation</span>
+                  <span class="d-app">BSCS</span>
+                </div>
+                <div class="right">
+                  <span class="d-status review">In review</span>
+                  <span class="d-assignee">Daniel Das</span>
+                </div>
+              </div>
+              <div class="d-line d-line-2">
+                <div class="left">
+                  <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                  <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">1</span></span>
+                </div>
+                <div class="right">
+                  <span>Created 25 Aug 2025</span>
+                </div>
+              </div>
+            </div>
+          <span class="d-age danger">11d</span>
+          </div>
+
+          <div class="d-card">
+            <span class="d-pri p2">P2</span>
+            <div class="d-body">
+              <div class="d-line d-line-1">
+                <div class="left">
+                  <span class="d-id">PDI-1117</span>
+                  <span class="d-summary">PDF formatting on long records</span>
+                  <span class="d-app">Customer App</span>
+                </div>
+                <div class="right">
+                  <span class="d-status open">Open</span>
+                  <span class="d-assignee">Layla Iyer</span>
+                </div>
+              </div>
+              <div class="d-line d-line-2">
+                <div class="left">
+                  <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                  <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">0</span></span>
+                </div>
+                <div class="right">
+                  <span>Created 26 Aug 2025</span>
+                </div>
+              </div>
+            </div>
+          <span class="d-age warn">10d</span>
+          </div>
+
+          <div class="d-card">
+            <span class="d-pri p2">P2</span>
+            <div class="d-body">
+              <div class="d-line d-line-1">
+                <div class="left">
+                  <span class="d-id">PDI-1119</span>
+                  <span class="d-summary">Retention policy not enforced after 90 days</span>
+                  <span class="d-app">CRM</span>
+                </div>
+                <div class="right">
+                  <span class="d-status open">Open</span>
+                  <span class="d-assignee">Daniel Das</span>
+                </div>
+              </div>
+              <div class="d-line d-line-2">
+                <div class="left">
+                  <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Kavya Ali</span></span>
+                  <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">1</span></span>
+                </div>
+                <div class="right">
+                  <span>Created 28 Aug 2025</span>
+                </div>
+              </div>
+            </div>
+          <span class="d-age warn">8d</span>
+          </div>
+
+          <div class="d-card">
+            <span class="d-pri p2">P2</span>
+            <div class="d-body">
+              <div class="d-line d-line-1">
+                <div class="left">
+                  <span class="d-id">PDI-1121</span>
+                  <span class="d-summary">Incorrect points for promotional cards</span>
+                  <span class="d-app">Dealer App</span>
+                </div>
+                <div class="right">
+                  <span class="d-status open">Open</span>
+                  <span class="d-assignee">Hiroshi Park</span>
+                </div>
+              </div>
+              <div class="d-line d-line-2">
+                <div class="left">
+                  <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                  <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">0</span></span>
+                </div>
+                <div class="right">
+                  <span>Created 01 Sep 2025</span>
+                </div>
+              </div>
+            </div>
+          <span class="d-age">5d</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1032,7 +1820,19 @@
       <div class="left">
         <div class="id">CR-686</div>
         <div class="summary">Audit log retention</div>
-        <div class="sub">Owned by Layla Iyer · 5 Jira issues attached · Towers: Cards, Wealth, Onboarding</div>
+        <div class="sub">
+          <span class="owner-chip">
+            <span class="owner-avatar">LI</span>
+            <span>Layla Iyer</span>
+          </span>
+          <span class="meta-dot">·</span>
+          <span class="meta-dim">5 Jira issues attached</span>
+          <span class="meta-dot">·</span>
+          <span class="meta-label">Towers:</span>
+          <span class="tower-chip">Cards</span>
+          <span class="tower-chip">Wealth</span>
+          <span class="tower-chip">Onboarding</span>
+        </div>
       </div>
       <div class="right">
         <span class="pill warning"><span class="dot"></span>In progress</span>
@@ -1048,7 +1848,24 @@
           AI summary · refreshed 10:42 AM
         </span>
       </div>
-      <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open and are blocking 3 test cases. At current velocity (~8 tests/day), the team needs approximately <strong>6 more days</strong> to clear the backlog. Recommend extending SIT by one week or descoping P1-blocked test cases for post-deployment.</p>
+      <p class="verdict-text">SIT execution is at <span class="v-hi brand">67%</span> with the planned end date in <span class="v-hi warn">3 days</span>. Two <span class="v-hi danger">P1 defects</span> on DSP and BSCS remain open and are blocking <span class="v-hi warn">3 test cases</span>. At current velocity (<span class="v-hi info">~8 tests/day</span>), the team needs approximately <span class="v-hi warn">6 more days</span> to clear the backlog.</p>
+      <div class="verdict-recommend">
+        <span class="rec-label">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Recommend
+        </span>
+        <p class="rec-text">Extend SIT by <span class="v-hi brand">one week</span>, or descope <span class="v-hi danger">P1-blocked test cases</span> for post-deployment.</p>
+      </div>
+      <div class="verdict-sources">
+        <span class="src-label">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>
+          Synthesized from
+        </span>
+        <span class="src-chip">Test execution</span>
+        <span class="src-chip">Open defects</span>
+        <span class="src-chip">Schedule</span>
+        <span class="src-chip">7-day velocity</span>
+      </div>
     </div>
 
     <!-- Tab strip -->
@@ -1082,8 +1899,8 @@
           <div class="timeline-track">
             <div class="timeline-fill" style="width: 67%;"></div>
             <div class="timeline-markers">
-              <div class="timeline-marker done"></div>
-              <div class="timeline-marker done"></div>
+              <div class="timeline-marker slipped"></div>
+              <div class="timeline-marker slipped"></div>
               <div class="timeline-marker current"></div>
               <div class="timeline-marker future"></div>
             </div>
@@ -1092,12 +1909,12 @@
             <div class="timeline-label">
               <div class="stage">Dev end</div>
               <div class="planned">planned Aug 12</div>
-              <div class="actual ok">actual Aug 15</div>
+              <div class="actual danger">actual Aug 15 · +3d</div>
             </div>
             <div class="timeline-label">
               <div class="stage">SIT start</div>
               <div class="planned">planned Aug 16</div>
-              <div class="actual ok">actual Aug 18</div>
+              <div class="actual danger">actual Aug 18 · +2d</div>
             </div>
             <div class="timeline-label">
               <div class="stage">SIT end</div>
@@ -1241,50 +2058,166 @@
     <!-- Defects tab -->
     <div class="tab-content" id="tab-defects">
       <div class="section">
-        <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
-        <div class="card-block">
-          <table class="data">
-            <thead>
-              <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Created</th><th>Tester</th><th>Assignee</th><th>TC blocked</th><th>Aging</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
-                <td><span class="pill danger">P1</span></td><td>Open</td>
-                <td class="mono">2025-08-22</td><td>Neha Khan</td><td>Hiroshi Park</td>
-                <td class="mono">TC-042, TC-051</td>
-                <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
-              </tr>
-              <tr>
-                <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
-                <td><span class="pill danger">P1</span></td><td>In review</td>
-                <td class="mono">2025-08-25</td><td>Neha Khan</td><td>Daniel Das</td>
-                <td class="mono">TC-067</td>
-                <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
-              </tr>
-              <tr>
-                <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
-                <td><span class="pill warning">P2</span></td><td>Open</td>
-                <td class="mono">2025-08-26</td><td>Neha Khan</td><td>Layla Iyer</td>
-                <td class="mono">—</td>
-                <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
-              </tr>
-              <tr>
-                <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
-                <td><span class="pill warning">P2</span></td><td>Open</td>
-                <td class="mono">2025-08-28</td><td>Kavya Ali</td><td>Daniel Das</td>
-                <td class="mono">TC-089</td>
-                <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
-              </tr>
-              <tr>
-                <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
-                <td><span class="pill warning">P2</span></td><td>Open</td>
-                <td class="mono">2025-09-01</td><td>Neha Khan</td><td>Hiroshi Park</td>
-                <td class="mono">—</td>
-                <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">5 open · age distribution</div></div>
+        <div class="defect-block">
+
+          <div class="age-hist-wrap">
+            <div class="age-hist-head">
+              <span class="label">Aging distribution</span>
+              <span class="insight"><strong>4 of 5</strong> defects are 8+ days old</span>
+            </div>
+            <div class="age-hist">
+              <div class="age-bucket">
+                <span class="count zero">0</span>
+                <div class="bar-wrap"><div class="bar-stack empty" style="height: 2px;"></div></div>
+                <span class="bucket-label">0–3d</span>
+              </div>
+              <div class="age-bucket">
+                <span class="count">1</span>
+                <div class="bar-wrap"><div class="bar-stack" style="height: 22%;"><div class="seg p2" data-priority="P2" data-count="1 defect" style="flex: 1;"></div></div></div>
+                <span class="bucket-label">4–7d</span>
+              </div>
+              <div class="age-bucket">
+                <span class="count">4</span>
+                <div class="bar-wrap"><div class="bar-stack" style="height: 88%;"><div class="seg p1" data-priority="P1" data-count="2 defects" style="flex: 2;"></div><div class="seg p2" data-priority="P2" data-count="2 defects" style="flex: 2;"></div></div></div>
+                <span class="bucket-label">8–14d</span>
+              </div>
+              <div class="age-bucket">
+                <span class="count zero">0</span>
+                <div class="bar-wrap"><div class="bar-stack empty" style="height: 2px;"></div></div>
+                <span class="bucket-label">15+d</span>
+              </div>
+            </div>
+          <div class="age-hist-legend"><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--danger));"></span>P1</span><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--warning));"></span>P2</span><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--muted-foreground) / 0.55);"></span>P3+P4</span></div>
+          </div>
+
+          <div class="defect-cards">
+            <div class="d-card">
+              <span class="d-pri p1">P1</span>
+              <div class="d-body">
+                <div class="d-line d-line-1">
+                  <div class="left">
+                    <span class="d-id">PDI-1118</span>
+                    <span class="d-summary">Push retries failing on threshold breach</span>
+                    <span class="d-app">DSP</span>
+                  </div>
+                  <div class="right">
+                    <span class="d-status open">Open</span>
+                    <span class="d-assignee">Hiroshi Park</span>
+                  </div>
+                </div>
+                <div class="d-line d-line-2">
+                  <div class="left">
+                    <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                    <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">2</span></span>
+                  </div>
+                  <div class="right"><span>Created 22 Aug 2025</span></div>
+                </div>
+              </div>
+          <span class="d-age danger">14d</span>
+            </div>
+
+            <div class="d-card">
+              <span class="d-pri p1">P1</span>
+              <div class="d-body">
+                <div class="d-line d-line-1">
+                  <div class="left">
+                    <span class="d-id">PDI-1120</span>
+                    <span class="d-summary">Incorrect threshold evaluation</span>
+                    <span class="d-app">BSCS</span>
+                  </div>
+                  <div class="right">
+                    <span class="d-status review">In review</span>
+                    <span class="d-assignee">Daniel Das</span>
+                  </div>
+                </div>
+                <div class="d-line d-line-2">
+                  <div class="left">
+                    <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                    <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">1</span></span>
+                  </div>
+                  <div class="right"><span>Created 25 Aug 2025</span></div>
+                </div>
+              </div>
+          <span class="d-age danger">11d</span>
+            </div>
+
+            <div class="d-card">
+              <span class="d-pri p2">P2</span>
+              <div class="d-body">
+                <div class="d-line d-line-1">
+                  <div class="left">
+                    <span class="d-id">PDI-1117</span>
+                    <span class="d-summary">PDF formatting on long records</span>
+                    <span class="d-app">Customer App</span>
+                  </div>
+                  <div class="right">
+                    <span class="d-status open">Open</span>
+                    <span class="d-assignee">Layla Iyer</span>
+                  </div>
+                </div>
+                <div class="d-line d-line-2">
+                  <div class="left">
+                    <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                    <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">0</span></span>
+                  </div>
+                  <div class="right"><span>Created 26 Aug 2025</span></div>
+                </div>
+              </div>
+          <span class="d-age warn">10d</span>
+            </div>
+
+            <div class="d-card">
+              <span class="d-pri p2">P2</span>
+              <div class="d-body">
+                <div class="d-line d-line-1">
+                  <div class="left">
+                    <span class="d-id">PDI-1119</span>
+                    <span class="d-summary">Retention policy not enforced after 90 days</span>
+                    <span class="d-app">CRM</span>
+                  </div>
+                  <div class="right">
+                    <span class="d-status open">Open</span>
+                    <span class="d-assignee">Daniel Das</span>
+                  </div>
+                </div>
+                <div class="d-line d-line-2">
+                  <div class="left">
+                    <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Kavya Ali</span></span>
+                    <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">1</span></span>
+                  </div>
+                  <div class="right"><span>Created 28 Aug 2025</span></div>
+                </div>
+              </div>
+          <span class="d-age warn">8d</span>
+            </div>
+
+            <div class="d-card">
+              <span class="d-pri p2">P2</span>
+              <div class="d-body">
+                <div class="d-line d-line-1">
+                  <div class="left">
+                    <span class="d-id">PDI-1121</span>
+                    <span class="d-summary">Incorrect points for promotional cards</span>
+                    <span class="d-app">Dealer App</span>
+                  </div>
+                  <div class="right">
+                    <span class="d-status open">Open</span>
+                    <span class="d-assignee">Hiroshi Park</span>
+                  </div>
+                </div>
+                <div class="d-line d-line-2">
+                  <div class="left">
+                    <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                    <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">0</span></span>
+                  </div>
+                  <div class="right"><span>Created 01 Sep 2025</span></div>
+                </div>
+              </div>
+          <span class="d-age">5d</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -1330,7 +2263,24 @@
               AI summary · 10:42 AM
             </span>
           </div>
-          <p class="verdict-text">SIT execution is at <strong>67%</strong> with the planned end date in <strong>3 days</strong>. Two P1 defects on Notification engine and Fraud rule update remain open, blocking 3 test cases. At current velocity (~8 tests/day), the team needs <strong>6 more days</strong> to clear the backlog. Recommend extending SIT or descoping blocked tests.</p>
+          <p class="verdict-text">SIT execution is at <span class="v-hi brand">67%</span> with the planned end date in <span class="v-hi warn">3 days</span>. Two <span class="v-hi danger">P1 defects</span> on DSP and BSCS remain open, blocking <span class="v-hi warn">3 test cases</span>. At current velocity (<span class="v-hi info">~8 tests/day</span>), the team needs <span class="v-hi warn">6 more days</span> to clear the backlog.</p>
+          <div class="verdict-recommend">
+            <span class="rec-label">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              Recommend
+            </span>
+            <p class="rec-text">Extend SIT, or descope <span class="v-hi danger">blocked tests</span>.</p>
+          </div>
+          <div class="verdict-sources">
+            <span class="src-label">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>
+              Synthesized from
+            </span>
+            <span class="src-chip">Tests</span>
+            <span class="src-chip">Defects</span>
+            <span class="src-chip">Schedule</span>
+            <span class="src-chip">Velocity</span>
+          </div>
         </div>
 
         <div class="section">
@@ -1339,8 +2289,8 @@
             <div class="timeline-track">
               <div class="timeline-fill" style="width: 67%;"></div>
               <div class="timeline-markers">
-                <div class="timeline-marker done"></div>
-                <div class="timeline-marker done"></div>
+                <div class="timeline-marker slipped"></div>
+                <div class="timeline-marker slipped"></div>
                 <div class="timeline-marker current"></div>
                 <div class="timeline-marker future"></div>
               </div>
@@ -1349,12 +2299,12 @@
               <div class="timeline-label">
                 <div class="stage">Dev end</div>
                 <div class="planned">Aug 12</div>
-                <div class="actual ok">Aug 15</div>
+                <div class="actual danger">Aug 15 · +3d</div>
               </div>
               <div class="timeline-label">
                 <div class="stage">SIT start</div>
                 <div class="planned">Aug 16</div>
-                <div class="actual ok">Aug 18</div>
+                <div class="actual danger">Aug 18 · +2d</div>
               </div>
               <div class="timeline-label">
                 <div class="stage">SIT end</div>
@@ -1479,40 +2429,166 @@
         </div>
 
         <div class="section">
-          <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">9 open · sorted by aging</div></div>
-          <div class="card-block" style="overflow-x: auto;">
-            <table class="data">
-              <thead>
-                <tr><th>Defect ID</th><th>Application</th><th>Priority</th><th>Status</th><th>Assignee</th><th>Aging</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="id-link">PDI-1118</span></td><td>Notification engine</td>
-                  <td><span class="pill danger">P1</span></td><td>Open</td><td>Hiroshi Park</td>
-                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 100%;"></div></div><span class="aging-days">14d</span></div></td>
-                </tr>
-                <tr>
-                  <td><span class="id-link">PDI-1120</span></td><td>Fraud rule update</td>
-                  <td><span class="pill danger">P1</span></td><td>In review</td><td>Daniel Das</td>
-                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill red" style="width: 79%;"></div></div><span class="aging-days">11d</span></div></td>
-                </tr>
-                <tr>
-                  <td><span class="id-link">PDI-1117</span></td><td>Statement export</td>
-                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Layla Iyer</td>
-                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 71%;"></div></div><span class="aging-days">10d</span></div></td>
-                </tr>
-                <tr>
-                  <td><span class="id-link">PDI-1119</span></td><td>Audit log</td>
-                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Daniel Das</td>
-                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill amber" style="width: 57%;"></div></div><span class="aging-days">8d</span></div></td>
-                </tr>
-                <tr>
-                  <td><span class="id-link">PDI-1121</span></td><td>Rewards accrual</td>
-                  <td><span class="pill warning">P2</span></td><td>Open</td><td>Hiroshi Park</td>
-                  <td><div class="aging-cell"><div class="aging-bar"><div class="fill" style="width: 36%;"></div></div><span class="aging-days">5d</span></div></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="section-head"><div class="section-title">Open Defects</div><div class="section-action">5 open · age distribution</div></div>
+          <div class="defect-block">
+
+            <div class="age-hist-wrap">
+              <div class="age-hist-head">
+                <span class="label">Aging distribution</span>
+                <span class="insight"><strong>4 of 5</strong> 8+ days old</span>
+              </div>
+              <div class="age-hist">
+                <div class="age-bucket">
+                  <span class="count zero">0</span>
+                  <div class="bar-wrap"><div class="bar-stack empty" style="height: 2px;"></div></div>
+                  <span class="bucket-label">0–3d</span>
+                </div>
+                <div class="age-bucket">
+                  <span class="count">1</span>
+                  <div class="bar-wrap"><div class="bar-stack" style="height: 22%;"><div class="seg p2" data-priority="P2" data-count="1 defect" style="flex: 1;"></div></div></div>
+                  <span class="bucket-label">4–7d</span>
+                </div>
+                <div class="age-bucket">
+                  <span class="count">4</span>
+                  <div class="bar-wrap"><div class="bar-stack" style="height: 88%;"><div class="seg p1" data-priority="P1" data-count="2 defects" style="flex: 2;"></div><div class="seg p2" data-priority="P2" data-count="2 defects" style="flex: 2;"></div></div></div>
+                  <span class="bucket-label">8–14d</span>
+                </div>
+                <div class="age-bucket">
+                  <span class="count zero">0</span>
+                  <div class="bar-wrap"><div class="bar-stack empty" style="height: 2px;"></div></div>
+                  <span class="bucket-label">15+d</span>
+                </div>
+              </div>
+            <div class="age-hist-legend"><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--danger));"></span>P1</span><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--warning));"></span>P2</span><span class="leg-item"><span class="leg-dot" style="background: hsl(var(--muted-foreground) / 0.55);"></span>P3+P4</span></div>
+            </div>
+
+            <div class="defect-cards">
+              <div class="d-card">
+                <span class="d-pri p1">P1</span>
+                <div class="d-body">
+                  <div class="d-line d-line-1">
+                    <div class="left">
+                      <span class="d-id">PDI-1118</span>
+                      <span class="d-summary">Push retries failing</span>
+                      <span class="d-app">DSP</span>
+                    </div>
+                    <div class="right">
+                      <span class="d-status open">Open</span>
+                      <span class="d-assignee">Hiroshi Park</span>
+                    </div>
+                  </div>
+                  <div class="d-line d-line-2">
+                    <div class="left">
+                      <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                      <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">2</span></span>
+                    </div>
+                    <div class="right"><span>Created 22 Aug 2025</span></div>
+                  </div>
+                </div>
+          <span class="d-age danger">14d</span>
+              </div>
+
+              <div class="d-card">
+                <span class="d-pri p1">P1</span>
+                <div class="d-body">
+                  <div class="d-line d-line-1">
+                    <div class="left">
+                      <span class="d-id">PDI-1120</span>
+                      <span class="d-summary">Incorrect threshold</span>
+                      <span class="d-app">BSCS</span>
+                    </div>
+                    <div class="right">
+                      <span class="d-status review">In review</span>
+                      <span class="d-assignee">Daniel Das</span>
+                    </div>
+                  </div>
+                  <div class="d-line d-line-2">
+                    <div class="left">
+                      <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                      <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">1</span></span>
+                    </div>
+                    <div class="right"><span>Created 25 Aug 2025</span></div>
+                  </div>
+                </div>
+          <span class="d-age danger">11d</span>
+              </div>
+
+              <div class="d-card">
+                <span class="d-pri p2">P2</span>
+                <div class="d-body">
+                  <div class="d-line d-line-1">
+                    <div class="left">
+                      <span class="d-id">PDI-1117</span>
+                      <span class="d-summary">PDF formatting bug</span>
+                      <span class="d-app">Customer App</span>
+                    </div>
+                    <div class="right">
+                      <span class="d-status open">Open</span>
+                      <span class="d-assignee">Layla Iyer</span>
+                    </div>
+                  </div>
+                  <div class="d-line d-line-2">
+                    <div class="left">
+                      <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                      <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">0</span></span>
+                    </div>
+                    <div class="right"><span>Created 26 Aug 2025</span></div>
+                  </div>
+                </div>
+          <span class="d-age warn">10d</span>
+              </div>
+
+              <div class="d-card">
+                <span class="d-pri p2">P2</span>
+                <div class="d-body">
+                  <div class="d-line d-line-1">
+                    <div class="left">
+                      <span class="d-id">PDI-1119</span>
+                      <span class="d-summary">Retention not enforced</span>
+                      <span class="d-app">CRM</span>
+                    </div>
+                    <div class="right">
+                      <span class="d-status open">Open</span>
+                      <span class="d-assignee">Daniel Das</span>
+                    </div>
+                  </div>
+                  <div class="d-line d-line-2">
+                    <div class="left">
+                      <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Kavya Ali</span></span>
+                      <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">1</span></span>
+                    </div>
+                    <div class="right"><span>Created 28 Aug 2025</span></div>
+                  </div>
+                </div>
+          <span class="d-age warn">8d</span>
+              </div>
+
+              <div class="d-card">
+                <span class="d-pri p2">P2</span>
+                <div class="d-body">
+                  <div class="d-line d-line-1">
+                    <div class="left">
+                      <span class="d-id">PDI-1121</span>
+                      <span class="d-summary">Points miscalc on promo</span>
+                      <span class="d-app">Dealer App</span>
+                    </div>
+                    <div class="right">
+                      <span class="d-status open">Open</span>
+                      <span class="d-assignee">Hiroshi Park</span>
+                    </div>
+                  </div>
+                  <div class="d-line d-line-2">
+                    <div class="left">
+                      <span class="d-meta-item"><span class="lbl">Tester:</span><span class="val">Neha Khan</span></span>
+                      <span class="d-meta-item"><span class="lbl">TC Blocked:</span><span class="val">0</span></span>
+                    </div>
+                    <div class="right"><span>Created 01 Sep 2025</span></div>
+                  </div>
+                </div>
+          <span class="d-age">5d</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -1609,6 +2685,14 @@
       const t = btn.dataset.tab;
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       document.getElementById('tab-' + t).classList.add('active');
+    });
+  });
+
+  // Refresh button spin micro-interaction
+  document.querySelectorAll('.nav-actions .btn-primary').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.add('spinning');
+      setTimeout(() => btn.classList.remove('spinning'), 700);
     });
   });
 </script>
